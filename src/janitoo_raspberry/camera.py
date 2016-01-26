@@ -229,7 +229,7 @@ class CameraPhoto(CameraComponent):
                 product_name="Photo", product_type="Software", product_manufacturer="Photo", **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-        uuid="snpashot"
+        uuid="snapshot"
         self.values[uuid] = self.value_factory['sensor_string'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
             help='Take a snapshot and return the name of the video',
