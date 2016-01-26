@@ -87,7 +87,7 @@ setup(
     """,
     version = janitoo_version,
     zip_safe = False,
-    scripts=['src/scripts/jnt_raspberry_fishtank'],
+    scripts=['src/scripts/jnt_fishtank'],
     packages = find_packages('src', exclude=["scripts", "docs", "config"]),
     package_dir = { '': 'src' },
     keywords = "raspberry",
