@@ -138,8 +138,6 @@ travis-deps:
 	for dir in src cache cache/janitoo_manager home log run etc init; do mkdir /opt/janitoo/$$dir; done
 	pip install git+git://github.com/bibi21000/janitoo_nosetests@master
 	pip install git+git://github.com/bibi21000/janitoo_nosetests_flask@master
-	git clone https://github.com/bibi21000/janitoo_raspberry_dht.git
-	make -C janitoo_raspberry_dht develop
 	pip install coveralls
 	@echo
 	@echo "Travis dependencies for ${MODULENAME} installed."
