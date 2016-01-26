@@ -59,12 +59,6 @@ data_files_config(data_files, 'docs','src/docs/','*')
 janitoo_entry_points = {
     "janitoo.threads": [
         "rpibasic = janitoo_raspberry.thread_basic:make_thread",
-        "pigpio = janitoo_raspberry.thread_gpio:make_thread",
-    ],
-    "janitoo.components": [
-        "pigpio.input = janitoo_raspberry.gpio:make_input",
-        "pigpio.output = janitoo_raspberry.gpio:make_output",
-        "pigpio.pwm = janitoo_raspberry.gpio:make_pwm",
     ],
 }
 
@@ -101,8 +95,6 @@ setup(
     data_files = data_files,
     install_requires=[
                      'janitoo >= %s'%"0.0.6",
-                     #~ 'janitoo_buses == %s'%janitoo_version,
-                     'RPi.GPIO',
                     ],
     dependency_links = [
       'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo-%s'%"0.0.7",
