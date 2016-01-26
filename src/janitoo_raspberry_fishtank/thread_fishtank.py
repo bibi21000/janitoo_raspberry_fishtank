@@ -55,17 +55,17 @@ assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 ##############################################################
 
 def make_thread(options):
-    if get_option_autostart(options, 'rpibasic') == True:
-        return CameraThread(options)
+    if get_option_autostart(options, 'fishtank') == True:
+        return FishtankThread(options)
     else:
         return None
 
-class CameraThread(JNTBusThread):
+class FishtankThread(JNTBusThread):
     """The basic thread
 
     """
     def init_bus(self):
         """Build the bus
         """
-        self.section = 'rpibasic'
-        self.bus = JNTBus(options=self.options, oid=self.section, product_name="Raspberry basic controller")
+        self.section = 'fishtank'
+        self.bus = JNTBus(options=self.options, oid=self.section, product_name="Raspberry fishtank controller")

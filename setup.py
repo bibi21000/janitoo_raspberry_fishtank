@@ -58,12 +58,12 @@ data_files_config(data_files, 'docs','src/docs/','*')
 #It will be used to collect entries without installing the package
 janitoo_entry_points = {
     "janitoo.threads": [
-        "rpibasic = janitoo_raspberry.thread_basic:make_thread",
+        "fishtank = janitoo_raspberry_fishtank.thread_fishtank:make_thread",
     ],
 }
 
 setup(
-    name = 'janitoo_raspberry',
+    name = 'janitoo_raspberry_fishtank',
     description = "A server which handle many controller (hardware, onewire, i2c, ...) dedicated to the raspberry",
     long_description = "A server which handle many controller (hardware, onewire, i2c, ...) dedicated to the raspberry",
     author='Sébastien GALLET aka bibi2100 <bibi21000@gmail.com>',
@@ -87,7 +87,7 @@ setup(
     """,
     version = janitoo_version,
     zip_safe = False,
-    scripts=['src/scripts/jnt_raspberry'],
+    scripts=['src/scripts/jnt_raspberry_fishtank'],
     packages = find_packages('src', exclude=["scripts", "docs", "config"]),
     package_dir = { '': 'src' },
     keywords = "raspberry",
@@ -95,9 +95,17 @@ setup(
     data_files = data_files,
     install_requires=[
                      'janitoo >= %s'%"0.0.6",
+                     'janitoo_raspberry',
+                     'janitoo_raspberry_dht',
+                     'janitoo_raspberry_i2c_hat',
+                     'janitoo_raspberry_gpio',
                     ],
     dependency_links = [
       'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo-%s'%"0.0.7",
+      'https://github.com/bibi21000/janitoo_raspberry/archive/master.zip#egg=janitoo_raspberry',
+      'https://github.com/bibi21000/janitoo_raspberry_dht/archive/master.zip#egg=janitoo_raspberry_dht',
+      'https://github.com/bibi21000/janitoo_raspberry_i2c_hat/archive/master.zip#egg=janitoo_raspberry_i2c_hat',
+      'https://github.com/bibi21000/janitoo_raspberry_gpio/archive/master.zip#egg=janitoo_raspberry_gpio',
     ],
     entry_points = janitoo_entry_points,
 )

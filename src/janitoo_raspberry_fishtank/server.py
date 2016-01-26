@@ -54,7 +54,7 @@ assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 assert(COMMAND_DESC[COMMAND_UPDATE] == 'COMMAND_UPDATE')
 ##############################################################
 
-class PiServer(JNTServer, JNTControllerManager):
+class FishtankServer(JNTServer, JNTControllerManager):
     """The Raspberry pi Server
 
     """
@@ -68,25 +68,17 @@ class PiServer(JNTServer, JNTControllerManager):
         self.section = "raspi"
         JNTControllerManager.__init__(self)
 
-    def _get_egg_path(self):
-        """Return the egg path of the module. Must be redefined in server class. Used to find alembic migration scripts.
-        """
-        try:
-            _dist = get_distribution('janitoo_pi')
-            return _dist.__file__
-        except AttributeError:
-            return os.path.join("/opt/janitoo/src",'src-pi/config')
 
     def start(self):
-        """Start the DHCP Server
+        """Start the Server
         """
         JNTServer.start(self)
-        JNTControllerManager.start_controller(self, self.section, self.options, cmd_classes=[COMMAND_UPDATE], hadd=None, name="Raspberry Pi Server",
-            product_name="Raspberry Pi Server", product_type="Raspberry Pi Server")
+        JNTControllerManager.start_controller(self, self.section, self.options, cmd_classes=[COMMAND_UPDATE], hadd=None, name="Raspberry Fishtank Server",
+            product_name="Raspberry Fishtank Server", product_type="Raspberry Fishtank Server")
         JNTControllerManager.start_controller_timer(self)
 
     def stop(self):
-        """Stop the DHCP Server
+        """Stop the Server
         """
         JNTControllerManager.stop_controller_timer(self)
         JNTControllerManager.stop_controller(self)
