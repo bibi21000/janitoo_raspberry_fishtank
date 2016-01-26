@@ -102,6 +102,7 @@ setup(
                      'janitoo_raspberry_dht',
                      'janitoo_raspberry_i2c_hat',
                      'janitoo_raspberry_gpio',
+                     'janitoo_raspberry_1wire',
                     ],
     dependency_links = [
       'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo-%s'%"0.0.7",
@@ -109,6 +110,7 @@ setup(
       'https://github.com/bibi21000/janitoo_raspberry_dht/archive/master.zip#egg=janitoo_raspberry_dht',
       'https://github.com/bibi21000/janitoo_raspberry_i2c_hat/archive/master.zip#egg=janitoo_raspberry_i2c_hat',
       'https://github.com/bibi21000/janitoo_raspberry_gpio/archive/master.zip#egg=janitoo_raspberry_gpio',
+      'https://github.com/bibi21000/janitoo_raspberry_1wire/archive/master.zip#egg=janitoo_raspberry_1wire',
     ],
     entry_points = janitoo_entry_points,
 )
