@@ -60,6 +60,9 @@ janitoo_entry_points = {
     "janitoo.threads": [
         "fishtank = janitoo_raspberry_fishtank.thread_fishtank:make_thread",
     ],
+    "janitoo.components": [
+        "fishtank.ambiance = janitoo_raspberry_fishtank.fishtank:make_ambiance",
+    ],
 }
 
 setup(

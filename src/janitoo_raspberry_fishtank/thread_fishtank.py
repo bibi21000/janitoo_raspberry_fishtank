@@ -67,5 +67,6 @@ class FishtankThread(JNTBusThread):
     def init_bus(self):
         """Build the bus
         """
+        from janitoo_raspberry_fishtank import FishtankBus
         self.section = 'fishtank'
-        self.bus = JNTBus(options=self.options, oid=self.section, product_name="Raspberry fishtank controller")
+        self.bus = FishtankBus(options=self.options, oid=self.section, product_name="Raspberry fishtank controller")
