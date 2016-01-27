@@ -62,4 +62,3 @@ class TestTemperatureComponent(JNTTComponent, JNTTComponentCommon):
     """Test the component
     """
     component_name = "fishtank.temperature"
-
