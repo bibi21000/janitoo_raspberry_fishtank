@@ -40,6 +40,7 @@ from janitoo.component import JNTComponent
 from janitoo.bus import JNTBus
 
 from janitoo_raspberry_dht.dht import DHTComponent
+from janitoo_raspberry_1write.bus_1wire import DS18B20Component
 
 ##############################################################
 #Check that we are in sync with the official command classes
@@ -57,6 +58,9 @@ assert(COMMAND_DESC[COMMAND_DOC_RESOURCE] == 'COMMAND_DOC_RESOURCE')
 
 def make_ambiance(**kwargs):
     return ambianceComponent(**kwargs)
+
+def make_temperature(**kwargs):
+    return temperatureComponent(**kwargs)
 
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
@@ -85,7 +89,19 @@ class FishtankBus(JNTBus):
         """
         JNTBus.stop(self)
 
-class ambianceComponent(DHTComponent):
+class temperatureComponent(DHTComponent):
+    """ A generic component for gpio """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.temperature')
+        name = kwargs.pop('name', "Temperature")
+        DHTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
+class ambianceComponent(DS18B20Component):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -93,7 +109,7 @@ class ambianceComponent(DHTComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.ambiance')
         name = kwargs.pop('name', "Ambiance")
-        DHTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        DS18B20Component.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 

@@ -62,6 +62,7 @@ janitoo_entry_points = {
     ],
     "janitoo.components": [
         "fishtank.ambiance = janitoo_raspberry_fishtank.fishtank:make_ambiance",
+        "fishtank.temperature = janitoo_raspberry_fishtank.fishtank:make_temperature",
     ],
 }
 
