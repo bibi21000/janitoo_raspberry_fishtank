@@ -41,7 +41,7 @@ from janitoo.bus import JNTBus
 
 from janitoo_raspberry_dht.dht import DHTComponent
 from janitoo_raspberry_i2c.bus_i2c import I2CBus
-from janitoo_raspberry_camera.camera import CameraBus
+#~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components_1wire import DS18B20
 
