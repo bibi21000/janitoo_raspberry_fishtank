@@ -64,7 +64,7 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
 
     def test_110_request_system_values(self):
         self.start()
-        nodeHADD=HADD%(138,0)
+        nodeHADD=HADD%(222,0)
         self.assertHeartbeatNode(hadd=nodeHADD)
         self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', node_hadd=nodeHADD, client_hadd=HADD%(9999,0))
         self.assertBroadcastRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', client_hadd=HADD%(9999,0))
