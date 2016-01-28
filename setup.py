@@ -63,6 +63,11 @@ janitoo_entry_points = {
     "janitoo.components": [
         "fishtank.ambiance = janitoo_raspberry_fishtank.fishtank:make_ambiance",
         "fishtank.temperature = janitoo_raspberry_fishtank.fishtank:make_temperature",
+        "fishtank.moon = janitoo_raspberry_fishtank.fishtank:make_moon",
+        "fishtank.sun = janitoo_raspberry_fishtank.fishtank:make_sun",
+        "fishtank.tide = janitoo_raspberry_fishtank.fishtank:make_tide",
+        "fishtank.airflow = janitoo_raspberry_fishtank.fishtank:make_airflow",
+        "fishtank.timelapse = janitoo_raspberry_fishtank.fishtank:make_timelapse",
     ],
 }
 
@@ -103,6 +108,7 @@ setup(
                      'janitoo_raspberry_dht',
                      'janitoo_raspberry_i2c_hat',
                      'janitoo_raspberry_gpio',
+                     'janitoo_raspberry_camera',
                      'janitoo_raspberry_1wire',
                     ],
     dependency_links = [
@@ -112,6 +118,7 @@ setup(
       'https://github.com/bibi21000/janitoo_raspberry_i2c_hat/archive/master.zip#egg=janitoo_raspberry_i2c_hat',
       'https://github.com/bibi21000/janitoo_raspberry_gpio/archive/master.zip#egg=janitoo_raspberry_gpio',
       'https://github.com/bibi21000/janitoo_raspberry_1wire/archive/master.zip#egg=janitoo_raspberry_1wire',
+      'https://github.com/bibi21000/janitoo_raspberry_camera/archive/master.zip#egg=janitoo_raspberry_camera',
     ],
     entry_points = janitoo_entry_points,
 )
