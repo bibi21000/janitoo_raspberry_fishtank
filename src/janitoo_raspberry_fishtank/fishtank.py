@@ -94,9 +94,9 @@ class FishtankBus(JNTBus):
         self.i2cbus = I2CBus(**kwargs)
         for value in self.i2cbus.values:
             self.values[value] = self.i2cbus.values[value]
-        self.cambus = CameraBus(**kwargs)
-        for value in self.cambus.values:
-            self.values[value] = self.cambus.values[value]
+        #~ self.cambus = CameraBus(**kwargs)
+        #~ for value in self.cambus.values:
+            #~ self.values[value] = self.cambus.values[value]
         self._fishtank_lock =  threading.Lock()
 
     def check_heartbeat(self):
