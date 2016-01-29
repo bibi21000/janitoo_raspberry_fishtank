@@ -128,7 +128,7 @@ develop:
 	@echo
 	@echo "Installation for developpers of ${MODULENAME} finished."
 
-travis-deps:
+travis-deps: docker-deps
 	sudo apt-get install -y python-pip
 	git clone https://github.com/bibi21000/janitoo_mosquitto.git
 	make -C janitoo_mosquitto deps
@@ -139,6 +139,8 @@ travis-deps:
 	pip install git+git://github.com/bibi21000/janitoo_nosetests@master
 	pip install git+git://github.com/bibi21000/janitoo_nosetests_flask@master
 	pip install coveralls
+	git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+	cd Adafruit_Python_DHT && ${PYTHON_EXEC} setup.py develop --force-test
 	@echo
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
