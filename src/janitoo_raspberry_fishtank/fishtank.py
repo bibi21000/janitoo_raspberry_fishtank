@@ -92,15 +92,11 @@ class FishtankBus(JNTBus):
         :param kwargs: parameters transmitted to :py:class:`smbus.SMBus` initializer
         """
         JNTBus.__init__(self, **kwargs)
-        self.owbus = OnewireBus(**kwargs)
-        for value in self.owbus.values:
-            self.values[value] = self.owbus.values[value]
-        self.i2cbus = I2CBus(**kwargs)
-        for value in self.i2cbus.values:
-            self.values[value] = self.i2cbus.values[value]
-        #~ self.cambus = CameraBus(**kwargs)
-        #~ for value in self.cambus.values:
-            #~ self.values[value] = self.cambus.values[value]
+        self.buses = {}
+        self.buses['owbus'] = OnewireBus(**kwargs)
+        self.buses['owbus'].export_values(self)
+        self.buses['i2cbus'] = I2CBus(**kwargs)
+        self.buses['i2cbus'].export_values(self)
         self._fishtank_lock =  threading.Lock()
 
     def check_heartbeat(self):
@@ -112,12 +108,25 @@ class FishtankBus(JNTBus):
     def start(self, mqttc, trigger_thread_reload_cb=None):
         """Start the bus
         """
+        #~ for bus in self.buses:
+            #~ self.buses[bus].start(mqttc, trigger_thread_reload_cb=None)
         JNTBus.start(self, mqttc, trigger_thread_reload_cb)
 
     def stop(self):
         """Stop the bus
         """
         JNTBus.stop(self)
+        for bus in self.buses:
+            self.buses[bus].stop()
+
+    def check_heartbeat(self):
+        """Check that the component is 'available'
+
+        """
+        res = True
+        for bus in self.buses:
+            res = res and self.buses[bus].check_heartbeat()
+        return res
 
 class AmbianceComponent(DHTComponent):
     """ A generic component for gpio """
