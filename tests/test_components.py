@@ -70,6 +70,11 @@ class TestSunComponent(JNTTComponent, JNTTComponentCommon):
     """
     component_name = "fishtank.sun"
 
+class TestBiocycleComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.biocycle"
+
 class TestMoonComponent(JNTTComponent, JNTTComponentCommon):
     """Test the component
     """

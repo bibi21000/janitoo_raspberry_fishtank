@@ -30,6 +30,7 @@ import logging
 logger = logging.getLogger(__name__)
 import os, sys
 import threading
+import datetime
 
 from janitoo.thread import JNTBusThread, BaseThread
 from janitoo.options import get_option_autostart
@@ -60,25 +61,28 @@ assert(COMMAND_DESC[COMMAND_DOC_RESOURCE] == 'COMMAND_DOC_RESOURCE')
 ##############################################################
 
 def make_ambiance(**kwargs):
-    return ambianceComponent(**kwargs)
+    return AmbianceComponent(**kwargs)
 
 def make_temperature(**kwargs):
-    return temperatureComponent(**kwargs)
+    return TemperatureComponent(**kwargs)
 
 def make_moon(**kwargs):
-    return moonComponent(**kwargs)
+    return MoonComponent(**kwargs)
 
 def make_sun(**kwargs):
-    return sunComponent(**kwargs)
+    return SunComponent(**kwargs)
 
 def make_tide(**kwargs):
-    return sunComponent(**kwargs)
+    return TideComponent(**kwargs)
+
+def make_biocycle(**kwargs):
+    return BiocycleComponent(**kwargs)
 
 def make_airflow(**kwargs):
-    return airflowComponent(**kwargs)
+    return AirflowComponent(**kwargs)
 
 def make_timelapse(**kwargs):
-    return timelapseComponent(**kwargs)
+    return TimelapseComponent(**kwargs)
 
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
@@ -115,7 +119,7 @@ class FishtankBus(JNTBus):
         """
         JNTBus.stop(self)
 
-class ambianceComponent(DHTComponent):
+class AmbianceComponent(DHTComponent):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -127,7 +131,7 @@ class ambianceComponent(DHTComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-class temperatureComponent(DS18B20):
+class TemperatureComponent(DS18B20):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -139,7 +143,155 @@ class temperatureComponent(DS18B20):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-class moonComponent(JNTComponent):
+class BiocycleComponent(JNTComponent):
+    """ A 'bio' cyclecomponent"""
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.biocycle')
+        name = kwargs.pop('name', "Bio cycle")
+        JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name, hearbeat=60,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+        uuid="cycle"
+        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The number of days in the cycle',
+            label='Days',
+            default=kwargs.pop('cycle', 28),
+        )
+        uuid="current"
+        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The current day in the cycle',
+            label='Day',
+            default=kwargs.pop('current', 11),
+        )
+        uuid="max"
+        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The max hours for the cycle in a day',
+            label='Max',
+            default=kwargs.pop('max', 1),
+        )
+        uuid="min"
+        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The min hours for the cycle in a day',
+            label='Min',
+            default=kwargs.pop('min', 0),
+        )
+        uuid="midi"
+        self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The hour of the midi for the cycle',
+            label='Mid.',
+            default=kwargs.pop('midi', '16:30'),
+        )
+        uuid="duration"
+        self.values[uuid] = self.value_factory['sensor_integer'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The duration in minutes of the cycle for the current day',
+            label='Duration',
+            get_data_cb=self.duration,
+        )
+        poll_value = self.values[uuid].create_poll_value(default=3600)
+        self.values[poll_value.uuid] = poll_value
+        uuid="factor_day"
+        self.values[uuid] = self.value_factory['sensor_float'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The factor for today. A value for -1 to 1',
+            label='Today',
+            get_data_cb=self.factor_day,
+        )
+        poll_value = self.values[uuid].create_poll_value(default=3600)
+        self.values[poll_value.uuid] = poll_value
+        uuid="factor_now"
+        self.values[uuid] = self.value_factory['sensor_float'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The factor for now. A value for -1 to 1',
+            label='Now',
+            get_data_cb=self.factor_now,
+        )
+        poll_value = self.values[uuid].create_poll_value(default=300)
+        self.values[poll_value.uuid] = poll_value
+
+    def factor_day(self, node_uuid, index):
+        data = None
+        try:
+            data = float(self.get_cycle_factor(index=index))
+            if data<-1:
+                data = -1.0
+            elif data>1:
+                data = 1.0
+        except :
+            logger.exception('Exception when calculationg day factor')
+        return data
+
+    def factor_now(self, node_uuid, index):
+        data = None
+        try:
+            data = float(self.get_hour_factor(index=index))
+            if data<-1:
+                data = -1.0
+            elif data>1:
+                data = 1.0
+        except :
+            logger.exception('Exception when calculationg now factor')
+        return data
+
+    def duration(self, node_uuid, index):
+        data = None
+        try:
+            data = int(self.get_cycle_duration(index=index))
+        except :
+            logger.exception('Exception when calculationg duration')
+        return data
+
+    def _get_factor(self, current, cycle):
+        """Calculate the factor"""
+        return 2.0 * (current - (cycle / 2)) / cycle
+
+    def get_cycle_factor(self, index=0):
+        """Get the factor related to day cycle"""
+        return self._get_factor(self.values['current'].get_data_index(index=index), self.values['cycle'].get_data_index(index=index))
+
+    def get_cycle_duration(self, index=0):
+        """Get the duration in minutes of the cycle for today"""
+        dfact = abs(self.get_cycle_factor())
+        dlen = self.values['min'].get_data_index(index=index)*60.0 + ( self.values['max'].get_data_index(index=index)*60.0 - self.values['min'].get_data_index(index=index)*60.0) * dfact
+        return dlen
+
+    def get_hour_factor(self, index=0, nnow=None):
+        """Get the factor according"""
+        if nnow is None:
+            nnow = datetime.datetime.now()
+        hh, mm = self.values['midi'].get_data_index(index=index).split(':')
+        midd = nnow.replace(hour=int(hh), minute=int(mm))
+        tdur = self.get_cycle_duration()
+        cdur = int(tdur/2)
+        start = midd - datetime.timedelta(minutes=cdur)
+        stop = midd + datetime.timedelta(minutes=cdur)
+        if nnow<start or nnow>stop:
+            return 0
+        elapsed = (nnow - start).total_seconds()/60
+        return 1-abs(self._get_factor(int(elapsed), int(tdur)))
+
+    def get_status(self, index=0, nnow=None):
+        """Get the factor according"""
+        if nnow is None:
+            nnow = datetime.datetime.now()
+        hh, mm = self.values['midi'].get_data_index(index=index).split(':')
+        midd = nnow.replace(hour=int(hh), minute=int(mm))
+        cdur = int(self.get_cycle_duration()/2)
+        start = midd - datetime.timedelta(minutes=cdur)
+        stop = midd + datetime.timedelta(minutes=cdur)
+        if nnow<start or nnow>stop:
+            return False
+        return True
+
+class MoonComponent(BiocycleComponent):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -147,53 +299,10 @@ class moonComponent(JNTComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.moon')
         name = kwargs.pop('name', "Moon")
-        JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        BiocycleComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
-        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
-        uuid="moon_cycle"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The number of days in the moon cycle',
-            label='Days',
-            default=21,
-        )
-        uuid="moon_current"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The current day in the moon cycle',
-            label='Day',
-            default=11,
-        )
-        uuid="moon_max_pwm"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The max pwm value for the moon cycle',
-            label='Day',
-            default=14,
-        )
-        uuid="moon_max"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The max hours the moon shine in a day',
-            label='Max',
-            default=14,
-        )
-        uuid="moon_min"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The min hours the moon shine i a day',
-            label='Min',
-            default=14,
-        )
-        uuid="moon_middle"
-        self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The hour of the middle hour in the day cycle ie 22:00',
-            label='Mid.',
-            default=14,
-        )
 
-class moonComponent(JNTComponent):
+class SunComponent(BiocycleComponent):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -201,53 +310,11 @@ class moonComponent(JNTComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.sun')
         name = kwargs.pop('name', "Sun")
-        JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        BiocycleComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
-        uuid="sun_cycle"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The number of days in the sun cycle',
-            label='Days',
-            default=90,
-        )
-        uuid="sun_current"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The current day in the sun cycle',
-            label='Day',
-            default=14,
-        )
-        uuid="sun_max_pwm"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The max pwm value for the sun cycle',
-            label='Day',
-            default=14,
-        )
-        uuid="sun_max"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The max hours the sun shine in a day',
-            label='Max',
-            default=14,
-        )
-        uuid="sun_min"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The min hours the sun shine i a day',
-            label='Min',
-            default=14,
-        )
-        uuid="sun_middle"
-        self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The hour of the middle hour in the day cycle ie 16:00',
-            label='Mid.',
-            default=14,
-        )
 
-class tideComponent(JNTComponent):
+class TideComponent(BiocycleComponent):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -255,67 +322,11 @@ class tideComponent(JNTComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.tide')
         name = kwargs.pop('name', "Tide")
-        JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        BiocycleComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
-        uuid="tide_cycle"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The number of days in the tide cycle',
-            label='Days',
-            default=90,
-        )
-        uuid="tide_current"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The current day in the tide cycle',
-            label='Day',
-            default=14,
-        )
-        uuid="tide_moon"
-        self.values[uuid] = self.value_factory['config_boolean'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='Take care of moon in tides calculation',
-            label='Day',
-            default=14,
-        )
-        uuid="tide_max_pwm"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The max pwm value for the tide cycle',
-            label='Day',
-            default=14,
-        )
-        uuid="tide_max"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The max hours the tide shine in a day',
-            label='Max',
-            default=14,
-        )
-        uuid="tide_min"
-        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The min hours the tide shine i a day',
-            label='Min',
-            default=14,
-        )
-        uuid="tide_high"
-        self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The hour of the high waters in the day cycle ie 20:00',
-            label='Mid.',
-            default=14,
-        )
-        uuid="tide_low"
-        self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
-            node_uuid=self.uuid,
-            help='The hour of the low tide in the day cycle ie 12:00',
-            label='Mid.',
-            default=14,
-        )
 
-class airflowComponent(JNTComponent):
+class AirflowComponent(JNTComponent):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -327,7 +338,7 @@ class airflowComponent(JNTComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-class timelapseComponent(JNTComponent):
+class TimelapseComponent(JNTComponent):
     """ A generic component for gpio """
 
     def __init__(self, bus=None, addr=None, **kwargs):
