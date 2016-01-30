@@ -130,7 +130,6 @@ class FishtankBus(JNTBus):
         if temp2 is None:
             log.warning('temp2 problem')
 
-
     def start(self, mqttc, trigger_thread_reload_cb=None):
         """Start the bus
         """
@@ -154,6 +153,13 @@ class FishtankBus(JNTBus):
         for bus in self.buses:
             res = res and self.buses[bus].check_heartbeat()
         return res
+
+    def loop(self, stopevent):
+        """Retrieve data
+        Don't do long task in loop. Use a separated thread to not perturbate the nodeman
+
+        """
+        pass
 
 class AmbianceComponent(DHTComponent):
     """ A generic component for gpio """
