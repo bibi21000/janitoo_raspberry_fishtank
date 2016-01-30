@@ -125,10 +125,10 @@ class FishtankBus(JNTBus):
         state = True
         temp1 = self.nodeman.find_value('surftemp', 'temperature').data
         if temp1 is None:
-            log.warning('temp1 problem')
+            log.warning('temp1 problemm')
         temp2 = self.nodeman.find_value('surftemp', 'temperature').data
         if temp2 is None:
-            log.warning('temp1 proble')
+            log.warning('temp2 problem')
 
 
     def start(self, mqttc, trigger_thread_reload_cb=None):
@@ -141,7 +141,7 @@ class FishtankBus(JNTBus):
     def stop(self):
         """Stop the bus
         """
-        slef.stop_check()
+        self.stop_check()
         JNTBus.stop(self)
         for bus in self.buses:
             self.buses[bus].stop()
