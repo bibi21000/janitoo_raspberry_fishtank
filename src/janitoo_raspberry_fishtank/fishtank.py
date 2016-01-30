@@ -98,12 +98,36 @@ class FishtankBus(JNTBus):
         self.buses['i2cbus'] = I2CBus(**kwargs)
         self.buses['i2cbus'].export_values(self)
         self._fishtank_lock =  threading.Lock()
+        self.check_timer = None
+        uuid="timer_delay"
+        self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The delay between 2 checks',
+            label='Timer.',
+            default=45,
+        )
 
-    def check_heartbeat(self):
+    def stop_check(self):
         """Check that the component is 'available'
 
         """
-        return True
+        if self.check_timer is not None:
+            self.check_timer.cancel()
+            self.check_timer = None
+
+    def on_check(self):
+        """Make a check using a timer.
+
+        """
+        if self.check_timer is None:
+            self.check_timer = threading.Timer(self.values['timer_delay'].data, self.on_check)
+            self.check_timer.start()
+        state = True
+        temp1 = self.nodeman.find_value('surftemp', 'temperature').data
+        if temp1 is None:
+            log.warning('')
+
+        if
 
     def start(self, mqttc, trigger_thread_reload_cb=None):
         """Start the bus
@@ -115,6 +139,7 @@ class FishtankBus(JNTBus):
     def stop(self):
         """Stop the bus
         """
+        slef.stop_check()
         JNTBus.stop(self)
         for bus in self.buses:
             self.buses[bus].stop()
