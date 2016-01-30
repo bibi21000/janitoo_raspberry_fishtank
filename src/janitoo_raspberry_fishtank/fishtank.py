@@ -125,9 +125,11 @@ class FishtankBus(JNTBus):
         state = True
         temp1 = self.nodeman.find_value('surftemp', 'temperature').data
         if temp1 is None:
-            log.warning('')
+            log.warning('temp1 problem')
+        temp2 = self.nodeman.find_value('surftemp', 'temperature').data
+        if temp2 is None:
+            log.warning('temp1 proble')
 
-        if
 
     def start(self, mqttc, trigger_thread_reload_cb=None):
         """Start the bus
