@@ -84,6 +84,3 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
         self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_configs', node_hadd=nodeHADD, client_hadd=HADD%(9999,0))
         self.assertBroadcastRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_configs', client_hadd=HADD%(9999,0))
         self.stop()
-
-
-

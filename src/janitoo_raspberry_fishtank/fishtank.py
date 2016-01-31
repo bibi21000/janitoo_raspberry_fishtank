@@ -45,6 +45,7 @@ from janitoo_raspberry_i2c.bus_i2c import I2CBus
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
+from janitoo.threads.remote import RemoteNodeComponent as RCNodeComponent
 
 ##############################################################
 #Check that we are in sync with the official command classes
@@ -84,6 +85,9 @@ def make_airflow(**kwargs):
 def make_timelapse(**kwargs):
     return TimelapseComponent(**kwargs)
 
+def make_remote_node(**kwargs):
+    return RemoteNodeComponent(**kwargs)
+
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
     """
@@ -94,7 +98,7 @@ class FishtankBus(JNTBus):
         JNTBus.__init__(self, **kwargs)
         self.buses = {}
         self.buses['owbus'] = OnewireBus(**kwargs)
-        self.buses['owbus'].export_values(self)
+        self.buses['owbus'].export_values(self, prefix='w1_')
         self.buses['i2cbus'] = I2CBus(**kwargs)
         self.buses['i2cbus'].export_values(self)
         self._fishtank_lock =  threading.Lock()
@@ -119,16 +123,30 @@ class FishtankBus(JNTBus):
         """Make a check using a timer.
 
         """
+        self.stop_check()
         if self.check_timer is None:
             self.check_timer = threading.Timer(self.values['timer_delay'].data, self.on_check)
             self.check_timer.start()
         state = True
-        temp1 = self.nodeman.find_value('surftemp', 'temperature').data
-        if temp1 is None:
-            log.warning('temp1 problemm')
-        temp2 = self.nodeman.find_value('surftemp', 'temperature').data
-        if temp2 is None:
-            log.warning('temp2 problem')
+        if self.nodeman.is_started:
+            #Check the state of some "importants sensors
+            try:
+                    temp1 = self.nodeman.find_value('surftemp', 'temperature')
+                    if temp1 is None or temp1.data is None:
+                        logger.warning('temp1 problemm')
+                    temp2 = self.nodeman.find_value('deeptemp', 'temperature').data
+                    if temp2 is None or temp2.data is None:
+                        logger.warning('temp2 problem')
+            except:
+                logger.exception("Error in on_check")
+            #Update the cycles
+            try:
+                    moonled = self.nodeman.find_node('moonled')
+                    #Do something
+                    sunled = self.nodeman.find_node('sunled')
+                    #Do something
+            except:
+                logger.exception("Error in on_check")
 
     def start(self, mqttc, trigger_thread_reload_cb=None):
         """Start the bus
@@ -136,6 +154,7 @@ class FishtankBus(JNTBus):
         #~ for bus in self.buses:
             #~ self.buses[bus].start(mqttc, trigger_thread_reload_cb=None)
         JNTBus.start(self, mqttc, trigger_thread_reload_cb)
+        self.on_check()
 
     def stop(self):
         """Stop the bus
@@ -161,8 +180,20 @@ class FishtankBus(JNTBus):
         """
         pass
 
+class RemoteNodeComponent(RCNodeComponent):
+    """ A generic component """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.remote_node')
+        name = kwargs.pop('name', "Remote node")
+        RemoteNodeComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
 class AmbianceComponent(DHTComponent):
-    """ A generic component for gpio """
+    """ A generic component for ambiance """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """

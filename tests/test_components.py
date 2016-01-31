@@ -94,3 +94,8 @@ class TestTimelapseComponent(JNTTComponent, JNTTComponentCommon):
     """Test the component
     """
     component_name = "fishtank.timelapse"
+
+class TestRemoteNodeComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.remote_node"

@@ -69,6 +69,7 @@ janitoo_entry_points = {
         "fishtank.tide = janitoo_raspberry_fishtank.fishtank:make_tide",
         "fishtank.airflow = janitoo_raspberry_fishtank.fishtank:make_airflow",
         "fishtank.timelapse = janitoo_raspberry_fishtank.fishtank:make_timelapse",
+        "fishtank.remote_node = janitoo_raspberry_fishtank.fishtank:make_remote_node",
     ],
 }
 
@@ -111,6 +112,7 @@ setup(
                      'janitoo_raspberry_gpio',
                      'janitoo_raspberry_camera',
                      'janitoo_raspberry_1wire',
+                     'janitoo_thermal',
                     ],
     dependency_links = [
       'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo-%s'%"0.0.7",
@@ -120,6 +122,7 @@ setup(
       'https://github.com/bibi21000/janitoo_raspberry_gpio/archive/master.zip#egg=janitoo_raspberry_gpio',
       'https://github.com/bibi21000/janitoo_raspberry_1wire/archive/master.zip#egg=janitoo_raspberry_1wire',
       'https://github.com/bibi21000/janitoo_raspberry_camera/archive/master.zip#egg=janitoo_raspberry_camera',
+      'https://github.com/bibi21000/janitoo_thermal/archive/master.zip#egg=janitoo_thermal',
     ],
     entry_points = janitoo_entry_points,
 )
