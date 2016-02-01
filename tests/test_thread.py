@@ -61,7 +61,8 @@ class TestFishtankThread(JNTTThreadRun, JNTTThreadRunCommon):
     conf_file = "tests/data/janitoo_raspberry_fishtank.conf"
 
     def test_101_thread_start_wait_long_stop(self):
-        self.skipTest("Fail on docker")
+        #~ self.skipTest("Fail on docker")
+        self.thread.start()
         time.sleep(60)
         #~ self.assertDir("/tmp/janitoo_test/home/public")
         #~ self.assertDir("/tmp/janitoo_test/home/public/generic/js")
