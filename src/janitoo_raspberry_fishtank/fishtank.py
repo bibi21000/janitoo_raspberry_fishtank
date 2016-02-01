@@ -178,7 +178,8 @@ class FishtankBus(JNTBus):
         Don't do long task in loop. Use a separated thread to not perturbate the nodeman
 
         """
-        pass
+        for bus in self.buses:
+            self.buses[bus].loop(stopevent)
 
 class RemoteNodeComponent(RCNodeComponent):
     """ A generic component """
