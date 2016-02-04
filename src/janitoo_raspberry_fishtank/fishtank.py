@@ -297,7 +297,14 @@ class BiocycleComponent(JNTComponent):
         poll_value = self.values[uuid].create_poll_value(default=300)
         self.values[poll_value.uuid] = poll_value
 
+    def check_heartbeat(self):
+        """Check that the component is 'available'
+        """
+        return True
+
     def factor_day(self, node_uuid, index):
+        """Return the day factor
+        """
         data = None
         try:
             data = float(self.get_cycle_factor(index=index))
@@ -310,6 +317,8 @@ class BiocycleComponent(JNTComponent):
         return data
 
     def factor_now(self, node_uuid, index):
+        """Return the instant factor
+        """
         data = None
         try:
             data = float(self.get_hour_factor(index=index))
@@ -322,6 +331,8 @@ class BiocycleComponent(JNTComponent):
         return data
 
     def duration(self, node_uuid, index):
+        '''Return the cycle duration in the day
+        '''
         data = None
         try:
             data = int(self.get_cycle_duration(index=index))
@@ -334,7 +345,8 @@ class BiocycleComponent(JNTComponent):
         return 2.0 * (current - (cycle / 2)) / cycle
 
     def get_cycle_factor(self, index=0):
-        """Get the factor related to day cycle"""
+        """Get the factor related to day cycle
+        """
         return self._get_factor(self.values['current'].get_data_index(index=index), self.values['cycle'].get_data_index(index=index))
 
     def get_cycle_duration(self, index=0):
@@ -344,7 +356,8 @@ class BiocycleComponent(JNTComponent):
         return dlen
 
     def get_hour_factor(self, index=0, nnow=None):
-        """Get the factor according"""
+        """Get the factor according
+        """
         if nnow is None:
             nnow = datetime.datetime.now()
         hh, mm = self.values['midi'].get_data_index(index=index).split(':')
@@ -359,7 +372,8 @@ class BiocycleComponent(JNTComponent):
         return 1-abs(self._get_factor(int(elapsed), int(tdur)))
 
     def get_status(self, index=0, nnow=None):
-        """Get the factor according"""
+        """Get the factor according
+        """
         if nnow is None:
             nnow = datetime.datetime.now()
         hh, mm = self.values['midi'].get_data_index(index=index).split(':')
