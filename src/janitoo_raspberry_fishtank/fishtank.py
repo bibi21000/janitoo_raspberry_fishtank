@@ -444,6 +444,11 @@ class TimelapseComponent(JNTComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
+    def check_heartbeat(self):
+        """Check that the component is 'available'
+        """
+        return True
+
 class ThermostatComponent(SimpleThermostatComponent):
     """ A thermostzt for water """
 
