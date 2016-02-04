@@ -45,6 +45,7 @@ from janitoo_raspberry_i2c.bus_i2c import I2CBus
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
+from janitoo_thermal.thermal import SimpleThermostatComponent, ThermalBus
 from janitoo.threads.remote import RemoteNodeComponent as RCNodeComponent
 
 ##############################################################
@@ -88,6 +89,9 @@ def make_timelapse(**kwargs):
 def make_remote_node(**kwargs):
     return RemoteNodeComponent(**kwargs)
 
+def make_thermostat(**kwargs):
+    return ThermostatComponent(**kwargs)
+
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
     """
@@ -101,6 +105,8 @@ class FishtankBus(JNTBus):
         self.buses['owbus'].export_values(self, prefix='w1_')
         self.buses['i2cbus'] = I2CBus(**kwargs)
         self.buses['i2cbus'].export_values(self)
+        self.buses['thermal'] = ThermalBus(**kwargs)
+        self.buses['thermal'].export_values(self)
         self._fishtank_lock =  threading.Lock()
         self.check_timer = None
         uuid="timer_delay"
@@ -424,3 +430,47 @@ class TimelapseComponent(JNTComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
+class ThermostatComponent(SimpleThermostatComponent):
+    """ A thermostzt for water """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.thermostat')
+        name = kwargs.pop('name', "Timelapse")
+        JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
+    def get_sensors(self):
+        """Return a list of all available sensors
+        """
+        return self._bus.find_values('fishtank.temperature', 'temperature')
+
+    def get_heaters(self):
+        """Return a list of all available heaters (relays)
+        """
+        values = self._bus.find_values('fishtank.external_heater', 'users_write')
+
+    def get_sensors_temperature(self, sensors):
+        """Return the temperature of the zone. Can be calculated from differents sensors.
+        """
+        nb = 0
+        tt = None
+        for t in sensors:
+            temp = t.data
+            if temp is not None:
+                tt = tt + temp if tt is not None else temp
+                nb += 1
+        if tt is None:
+            return None
+        return tt : nb
+
+    def activate_heaters(self, heaters):
+        """Activate all heaters in the zone
+        """
+        state = heaters[0].get_cache(index=0)
+        onstate = heaters[0].get_value_config(index=0)[3]
+        if state != onstate:
+            heaters[0].set_cache(index=0, data=onstate)
+            logger.debug("[%s] - [%s] --------------------------------- Update heater to onstate.", self.__class__.__name__, self.uuid)

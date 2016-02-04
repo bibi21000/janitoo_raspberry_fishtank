@@ -70,6 +70,7 @@ janitoo_entry_points = {
         "fishtank.airflow = janitoo_raspberry_fishtank.fishtank:make_airflow",
         "fishtank.timelapse = janitoo_raspberry_fishtank.fishtank:make_timelapse",
         "fishtank.remote_node = janitoo_raspberry_fishtank.fishtank:make_remote_node",
+        "fishtank.thermostat = janitoo_raspberry_fishtank.fishtank:make_thermostat",
     ],
 }
 
