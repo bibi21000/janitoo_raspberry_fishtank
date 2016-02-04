@@ -464,7 +464,7 @@ class ThermostatComponent(SimpleThermostatComponent):
                 nb += 1
         if tt is None:
             return None
-        return tt : nb
+        return tt / nb
 
     def activate_heaters(self, heaters):
         """Activate all heaters in the zone
