@@ -297,6 +297,14 @@ class BiocycleComponent(JNTComponent):
         poll_value = self.values[uuid].create_poll_value(default=300)
         self.values[poll_value.uuid] = poll_value
 
+    def current_rotate(self):
+        """Rotate the current day to go ahead in the cycle
+        """
+        if datetime.date.now().hour == 0:
+            self.options.set_option(self.section, 'current_rotate_lastrun', datetime.now().strftime('%m/%d/%Y %H:%M:%S'))
+            current = self.values['current'].get_data_index(index=index)
+            current = self.values['current'].set_data_index(index=index, data=current)
+
     def check_heartbeat(self):
         """Check that the component is 'available'
         """
@@ -315,6 +323,20 @@ class BiocycleComponent(JNTComponent):
         except :
             logger.exception('Exception when calculationg day factor')
         return data
+
+    def start(self, mqttc):
+        """Start the component. Can be used to start a thread to acquire data.
+
+        """
+        self._bus.nodeman.add_hourly_job(self.current_rotate)
+        return JNTComponent.start(self, mqttc)
+
+    def stop(self):
+        """Stop the component.
+
+        """
+        self._bus.nodeman.remove_hourly_job(self.current_rotate)
+        return JNTComponent.stop(self)
 
     def factor_now(self, node_uuid, index):
         """Return the instant factor

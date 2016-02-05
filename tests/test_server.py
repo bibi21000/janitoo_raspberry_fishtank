@@ -67,20 +67,32 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
 
     def test_110_request_system_values(self):
         self.start()
-        nodeHADD=HADD%(222,1)
-        self.assertHeartbeatNode(hadd=nodeHADD)
-        nodeHADD=HADD%(222,2)
-        self.assertHeartbeatNode(hadd=nodeHADD)
-        nodeHADD=HADD%(222,3)
-        self.assertHeartbeatNode(hadd=nodeHADD)
-        nodeHADD=HADD%(222,4)
-        self.assertHeartbeatNode(hadd=nodeHADD)
-        nodeHADD=HADD%(222,5)
-        self.assertHeartbeatNode(hadd=nodeHADD)
-        nodeHADD=HADD%(222,0)
-        self.assertHeartbeatNode(hadd=nodeHADD)
-        self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', node_hadd=nodeHADD, client_hadd=HADD%(9999,0))
-        self.assertBroadcastRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', client_hadd=HADD%(9999,0))
-        self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_configs', node_hadd=nodeHADD, client_hadd=HADD%(9999,0))
-        self.assertBroadcastRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_configs', client_hadd=HADD%(9999,0))
-        self.stop()
+        try:
+            nodeHADD=HADD%(222,1)
+            self.assertHeartbeatNode(hadd=nodeHADD)
+            nodeHADD=HADD%(222,2)
+            self.assertHeartbeatNode(hadd=nodeHADD)
+            nodeHADD=HADD%(222,3)
+            self.assertHeartbeatNode(hadd=nodeHADD)
+            nodeHADD=HADD%(222,4)
+            self.assertHeartbeatNode(hadd=nodeHADD)
+            nodeHADD=HADD%(222,5)
+            self.assertHeartbeatNode(hadd=nodeHADD)
+            nodeHADD=HADD%(222,0)
+            self.assertHeartbeatNode(hadd=nodeHADD)
+            self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', node_hadd=nodeHADD, client_hadd=HADD%(9999,0))
+            self.assertBroadcastRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', client_hadd=HADD%(9999,0))
+            self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_configs', node_hadd=nodeHADD, client_hadd=HADD%(9999,0))
+            self.assertBroadcastRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_configs', client_hadd=HADD%(9999,0))
+        finally:
+            self.stop()
+
+    def test_120_server_start_no_error_in_log(self):
+        self.start()
+        try:
+            time.sleep(60)
+            self.assertInLogfile('Found heartbeats in timeout')
+            self.assertNotInLogfile('^ERROR ')
+        finally:
+            self.stop()
+
