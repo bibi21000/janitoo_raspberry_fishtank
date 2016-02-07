@@ -88,6 +88,7 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
             self.stop()
 
     def test_120_server_start_no_error_in_log(self):
+        self.onlyRasperryTest()
         self.start()
         try:
             time.sleep(60)
