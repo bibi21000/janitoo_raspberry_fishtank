@@ -330,8 +330,11 @@ class BiocycleComponent(JNTComponent):
         """Rotate the current day to go ahead in the cycle
         """
         self.values['last_rotate'].set_data_index(index=0, data=datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S'))
-        current = self.values['current'].get_data_index(index=0)
-        self.values['current'].set_data_index(index=0, data=current+1)
+        nextd = self.values['current'].get_data_index(index=0)+1
+        if nextd >= self.values['cycle'].data:
+            self.values['current'].set_data_index(index=0, data=0)
+        else:
+            self.values['current'].set_data_index(index=0, data=nextd)
         if self.node is not None:
             self._bus.nodeman.publish_poll(self.mqttc, self.values['current'])
             self._bus.nodeman.publish_poll(self.mqttc, self.values['last_rotate'])
