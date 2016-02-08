@@ -285,10 +285,9 @@ class BiocycleComponent(JNTComponent):
         self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
             help='The last date of rotation',
-            label='Mid.',
-            default=kwargs.pop('midi', '16:30'),
+            label='Last',
         )
-        poll_value = self.values[uuid].create_poll_value(default=900)
+        poll_value = self.values[uuid].create_poll_value(default=1800)
         self.values[poll_value.uuid] = poll_value
         uuid="midi"
         self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
@@ -333,6 +332,7 @@ class BiocycleComponent(JNTComponent):
         self.values['current'].set_data_index(index=0, data=current+1)
         if self.node is not None:
             self._bus.nodeman.publish_poll(self.mqttc, self.values['current'])
+            self._bus.nodeman.publish_poll(self.mqttc, self.values['last_rotate'])
 
     def check_heartbeat(self):
         """Check that the component is 'available'
