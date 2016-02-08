@@ -110,4 +110,3 @@ class TestCyclicEvent(JNTTBase):
         print bc.values['current'].get_data_index(node_uuid='moon', index=0)
         bc.current_rotate()
         print bc.values['current'].get_data_index(node_uuid='moon', index=0)
-        eee
