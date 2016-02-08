@@ -267,6 +267,8 @@ class BiocycleComponent(JNTComponent):
             label='Day',
             default=kwargs.pop('current', 11),
         )
+        poll_value = self.values[uuid].create_poll_value(default=3600)
+        self.values[poll_value.uuid] = poll_value
         uuid="max"
         self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
