@@ -28,8 +28,10 @@ import time, datetime
 import unittest
 import threading
 import logging
+from logging.config import fileConfig as logging_fileConfig
 from pkg_resources import iter_entry_points
 import datetime
+import mock
 
 from janitoo_nosetests import JNTTBase
 from janitoo_nosetests.server import JNTTServer, JNTTServerCommon
@@ -42,9 +44,11 @@ from janitoo.utils import HADD_SEP, HADD
 from janitoo.utils import TOPIC_HEARTBEAT
 from janitoo.utils import TOPIC_NODES, TOPIC_NODES_REPLY, TOPIC_NODES_REQUEST
 from janitoo.utils import TOPIC_BROADCAST_REPLY, TOPIC_BROADCAST_REQUEST
-from janitoo.utils import TOPIC_VALUES_USER, TOPIC_VALUES_CONFIG, TOPIC_VALUES_SYSTEM, TOPIC_VALUES_BASIC
+from janitoo.utils import TOPIC_BROADCAST_REPLY, TOPIC_BROADCAST_REQUEST
+from janitoo.options import JNTOptions
+from janitoo.runner import jnt_parse_args
 
-from janitoo_raspberry_fishtank.fishtank import BiocycleComponent
+from janitoo_raspberry_fishtank.fishtank import FishtankBus, BiocycleComponent, MoonComponent
 
 ##############################################################
 #Check that we are in sync with the official command classes
@@ -56,9 +60,14 @@ COMMAND_DISCOVERY = 0x5000
 assert(COMMAND_DESC[COMMAND_DISCOVERY] == 'COMMAND_DISCOVERY')
 ##############################################################
 
+class FakeNodeman(object):
+    section='fishtank'
+
 class TestCyclicEvent(JNTTBase):
     """Test
     """
+    conf_file = "tests/data/janitoo_raspberry_fishtank.conf"
+    prog = 'test'
 
     def test_001_get_cycle_factor(self):
         self.assertEqual(BiocycleComponent(cycle=28, current=0).get_cycle_factor(), -1)
@@ -88,3 +97,17 @@ class TestCyclicEvent(JNTTBase):
                            BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow+datetime.timedelta(minutes=12)))
         self.assertGreater(BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=9)),
                            BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=12)))
+
+    def test_021_rotate_cycle(self):
+        logging_fileConfig(self.conf_file)
+        with mock.patch('sys.argv', [self.prog, 'start', '--conf_file=%s'%self.conf_file]):
+            options = vars(jnt_parse_args())
+        self.options = JNTOptions(options)
+        bus = FishtankBus(options=self.options)
+        bus.nodeman=FakeNodeman()
+        #~ bus.start(None)
+        bc = MoonComponent(bus=bus, cycle=28, current=0, min=0, max=1, options=self.options, node_uuid='fishtank__moon')
+        print bc.values['current'].get_data_index(node_uuid='moon', index=0)
+        bc.current_rotate()
+        print bc.values['current'].get_data_index(node_uuid='moon', index=0)
+        eee

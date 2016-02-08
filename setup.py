@@ -71,6 +71,7 @@ janitoo_entry_points = {
         "fishtank.timelapse = janitoo_raspberry_fishtank.fishtank:make_timelapse",
         "fishtank.remote_node = janitoo_raspberry_fishtank.fishtank:make_remote_node",
         "fishtank.thermostat = janitoo_raspberry_fishtank.fishtank:make_thermostat",
+        "fishtank.switch_fullsun = janitoo_raspberry_fishtank.fishtank:make_switch_fullsun",
     ],
 }
 

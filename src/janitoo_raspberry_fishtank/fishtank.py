@@ -45,6 +45,10 @@ from janitoo_raspberry_i2c.bus_i2c import I2CBus
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
+#~ try:
+    #~ from janitoo_raspberry_gpio.gpio import OuputComponent
+#~ except RuntimeError:
+    #~ from janitoo.component import JNTComponent as OuputComponent
 from janitoo_thermal.thermal import SimpleThermostatComponent, ThermalBus
 from janitoo.threads.remote import RemoteNodeComponent as RCNodeComponent
 
@@ -92,6 +96,9 @@ def make_remote_node(**kwargs):
 def make_thermostat(**kwargs):
     return ThermostatComponent(**kwargs)
 
+def make_switch_fullsun(**kwargs):
+    return SwitchFullsunComponent(**kwargs)
+
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
     """
@@ -137,20 +144,32 @@ class FishtankBus(JNTBus):
         if self.nodeman.is_started:
             #Check the state of some "importants sensors
             try:
-                    temp1 = self.nodeman.find_value('surftemp', 'temperature')
-                    if temp1 is None or temp1.data is None:
-                        logger.warning('temp1 problemm')
-                    temp2 = self.nodeman.find_value('deeptemp', 'temperature').data
-                    if temp2 is None or temp2.data is None:
-                        logger.warning('temp2 problem')
+                temp1 = self.nodeman.find_value('surftemp', 'temperature')
+                if temp1 is None or temp1.data is None:
+                    logger.warning('temp1 problemm')
+                temp2 = self.nodeman.find_value('deeptemp', 'temperature').data
+                if temp2 is None or temp2.data is None:
+                    logger.warning('temp2 problem')
             except:
                 logger.exception("Error in on_check")
             #Update the cycles
             try:
-                    moonled = self.nodeman.find_node('moonled')
-                    #Do something
-                    sunled = self.nodeman.find_node('sunled')
-                    #Do something
+                moonled = self.nodeman.find_node('moonled')
+                #Do something
+                sunled = self.nodeman.find_node('sunled')
+                #Do something
+            except:
+                logger.exception("Error in on_check")
+            #Update the fullsun
+            try:
+                switch = self.nodeman.find_value('switch_fullsun', 'switchh')
+                factor = self.nodeman.find_value('sun', 'factor_now').data
+                if factor > 0.8:
+                    #Set fullsun on
+                    pass
+                elif factor < 0.79:
+                    #Set fullsun off
+                    pass
             except:
                 logger.exception("Error in on_check")
 
@@ -251,17 +270,26 @@ class BiocycleComponent(JNTComponent):
         uuid="max"
         self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
-            help='The max hours for the cycle in a day',
+            help='The max minutes for the cycle in a day',
             label='Max',
             default=kwargs.pop('max', 1),
         )
         uuid="min"
         self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
-            help='The min hours for the cycle in a day',
+            help='The min minutes for the cycle in a day',
             label='Min',
             default=kwargs.pop('min', 0),
         )
+        uuid="last_rotate"
+        self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
+            node_uuid=self.uuid,
+            help='The last date of rotation',
+            label='Mid.',
+            default=kwargs.pop('midi', '16:30'),
+        )
+        poll_value = self.values[uuid].create_poll_value(default=900)
+        self.values[poll_value.uuid] = poll_value
         uuid="midi"
         self.values[uuid] = self.value_factory['config_string'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
@@ -300,10 +328,11 @@ class BiocycleComponent(JNTComponent):
     def current_rotate(self):
         """Rotate the current day to go ahead in the cycle
         """
-        if datetime.date.now().hour == 0:
-            self.options.set_option(self.section, 'current_rotate_lastrun', datetime.now().strftime('%m/%d/%Y %H:%M:%S'))
-            current = self.values['current'].get_data_index(index=index)
-            current = self.values['current'].set_data_index(index=index, data=current)
+        self.values['last_rotate'].set_data_index(index=0, data=datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S'))
+        current = self.values['current'].get_data_index(index=0)
+        self.values['current'].set_data_index(index=0, data=current+1)
+        if self.node is not None:
+            self._bus.nodeman.publish_poll(self.mqttc, self.values['current'])
 
     def check_heartbeat(self):
         """Check that the component is 'available'
@@ -328,14 +357,14 @@ class BiocycleComponent(JNTComponent):
         """Start the component. Can be used to start a thread to acquire data.
 
         """
-        self._bus.nodeman.add_hourly_job(self.current_rotate)
+        self._bus.nodeman.add_daily_job(self.current_rotate)
         return JNTComponent.start(self, mqttc)
 
     def stop(self):
         """Stop the component.
 
         """
-        self._bus.nodeman.remove_hourly_job(self.current_rotate)
+        self._bus.nodeman.remove_daily_job(self.current_rotate)
         return JNTComponent.stop(self)
 
     def factor_now(self, node_uuid, index):
@@ -374,7 +403,7 @@ class BiocycleComponent(JNTComponent):
     def get_cycle_duration(self, index=0):
         """Get the duration in minutes of the cycle for today"""
         dfact = abs(self.get_cycle_factor())
-        dlen = self.values['min'].get_data_index(index=index)*60.0 + ( self.values['max'].get_data_index(index=index)*60.0 - self.values['min'].get_data_index(index=index)*60.0) * dfact
+        dlen = self.values['min'].get_data_index(index=index) + ( self.values['max'].get_data_index(index=index) - self.values['min'].get_data_index(index=index)) * dfact
         return dlen
 
     def get_hour_factor(self, index=0, nnow=None):
@@ -441,6 +470,18 @@ class TideComponent(BiocycleComponent):
         BiocycleComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
+#~ class SwitchFullsunComponent(OutputComponent):
+    #~ """ A generic component for gpio """
+#~
+    #~ def __init__(self, bus=None, addr=None, **kwargs):
+        #~ """
+        #~ """
+        #~ oid = kwargs.pop('oid', 'fishtank.switch_fullsun')
+        #~ name = kwargs.pop('name', "Fullsun")
+        #~ OutputComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                #~ **kwargs)
+        #~ logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class AirflowComponent(JNTComponent):
     """ A generic component for gpio """
