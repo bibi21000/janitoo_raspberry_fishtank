@@ -408,7 +408,7 @@ class BiocycleComponent(JNTComponent):
     def get_cycle_duration(self, index=0):
         """Get the duration in minutes of the cycle for today"""
         dfact = abs(self.get_cycle_factor())
-        dlen = self.values['min'].get_data_index(index=index) + ( self.values['max'].get_data_index(index=index) - self.values['min'].get_data_index(index=index)) * dfact
+        dlen = self.values['min'].get_data_index(index=index) + ( self.values['max'].get_data_index(index=index) - self.values['min'].get_data_index(index=index)) * dfact * 60
         return dlen
 
     def get_hour_factor(self, index=0, nnow=None):
