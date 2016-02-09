@@ -299,7 +299,7 @@ class BiocycleComponent(JNTComponent):
             default=kwargs.pop('midi', '16:30'),
         )
         uuid="duration"
-        self.values[uuid] = self.value_factory['sensor_integer'](options=self.options, uuid=uuid,
+        self.values[uuid] = self.value_factory['sensor_basic_integer'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
             help='The duration in minutes of the cycle for the current day',
             label='Duration',
@@ -308,7 +308,7 @@ class BiocycleComponent(JNTComponent):
         poll_value = self.values[uuid].create_poll_value(default=3600)
         self.values[poll_value.uuid] = poll_value
         uuid="factor_day"
-        self.values[uuid] = self.value_factory['sensor_float'](options=self.options, uuid=uuid,
+        self.values[uuid] = self.value_factory['sensor_basic_float'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
             help='The factor for today. A value for -1 to 1',
             label='Today',
@@ -317,7 +317,7 @@ class BiocycleComponent(JNTComponent):
         poll_value = self.values[uuid].create_poll_value(default=3600)
         self.values[poll_value.uuid] = poll_value
         uuid="factor_now"
-        self.values[uuid] = self.value_factory['sensor_float'](options=self.options, uuid=uuid,
+        self.values[uuid] = self.value_factory['sensor_basic_float'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
             help='The factor for now. A value for -1 to 1',
             label='Now',
