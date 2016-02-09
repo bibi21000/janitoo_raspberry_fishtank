@@ -274,7 +274,7 @@ class BiocycleComponent(JNTComponent):
             node_uuid=self.uuid,
             help='The max minutes for the cycle in a day',
             label='Max',
-            default=kwargs.pop('max', 1),
+            default=kwargs.pop('max', 60),
         )
         uuid="min"
         self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
@@ -391,7 +391,7 @@ class BiocycleComponent(JNTComponent):
         '''
         data = None
         try:
-            data = int(self.get_cycle_duration(index=index) * 60)
+            data = int(self.get_cycle_duration(index=index))
         except :
             logger.exception('Exception when calculationg duration')
         return data

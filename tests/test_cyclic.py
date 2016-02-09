@@ -80,23 +80,23 @@ class TestCyclicEvent(JNTTBase):
         self.assertEqual(BiocycleComponent(cycle=28, current=7).get_cycle_factor(),BiocycleComponent(cycle=280, current=70).get_cycle_factor())
 
     def test_001_get_cycle_duration(self):
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=1).get_cycle_duration(), 60)
-        self.assertEqual(BiocycleComponent(cycle=28, current=14, min=0, max=1).get_cycle_duration(), 0)
-        self.assertEqual(BiocycleComponent(cycle=28, current=28, min=0, max=1).get_cycle_duration(), 60)
-        self.assertEqual(BiocycleComponent(cycle=28, current=18, min=0, max=1).get_cycle_duration(),BiocycleComponent(cycle=280, current=180, min=0, max=1).get_cycle_duration())
-        self.assertEqual(BiocycleComponent(cycle=28, current=7, min=0, max=1).get_cycle_duration(),BiocycleComponent(cycle=280, current=70, min=0, max=1).get_cycle_duration())
-        self.assertEqual(BiocycleComponent(cycle=28, current=18, min=1, max=3).get_cycle_duration(),BiocycleComponent(cycle=280, current=180, min=1, max=3).get_cycle_duration())
-        self.assertEqual(BiocycleComponent(cycle=28, current=7, min=2, max=7).get_cycle_duration(),BiocycleComponent(cycle=280, current=70, min=2, max=7).get_cycle_duration())
+        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60).get_cycle_duration(), 60)
+        self.assertEqual(BiocycleComponent(cycle=28, current=14, min=0, max=60).get_cycle_duration(), 0)
+        self.assertEqual(BiocycleComponent(cycle=28, current=28, min=0, max=60).get_cycle_duration(), 60)
+        self.assertEqual(BiocycleComponent(cycle=28, current=18, min=0, max=60).get_cycle_duration(),BiocycleComponent(cycle=280, current=180, min=0, max=60).get_cycle_duration())
+        self.assertEqual(BiocycleComponent(cycle=28, current=7, min=0, max=60).get_cycle_duration(),BiocycleComponent(cycle=280, current=70, min=0, max=60).get_cycle_duration())
+        self.assertEqual(BiocycleComponent(cycle=28, current=18, min=60, max=180).get_cycle_duration(),BiocycleComponent(cycle=280, current=180, min=60, max=180).get_cycle_duration())
+        self.assertEqual(BiocycleComponent(cycle=28, current=7, min=120, max=420).get_cycle_duration(),BiocycleComponent(cycle=280, current=70, min=120, max=420).get_cycle_duration())
 
     def test_011_factor_middle_cycle(self):
         nnow = datetime.datetime.now()
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%((nnow-datetime.timedelta(hours=1)).hour,nnow.minute)).get_hour_factor(nnow=nnow), 0)
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%((nnow+datetime.timedelta(hours=1)).hour,nnow.minute)).get_hour_factor(nnow=nnow), 0)
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow), 1)
-        self.assertGreater(BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow+datetime.timedelta(minutes=9)),
-                           BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow+datetime.timedelta(minutes=12)))
-        self.assertGreater(BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=9)),
-                           BiocycleComponent(cycle=28, current=0, min=0, max=1, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=12)))
+        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%((nnow-datetime.timedelta(hours=1)).hour,nnow.minute)).get_hour_factor(nnow=nnow), 0)
+        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%((nnow+datetime.timedelta(hours=1)).hour,nnow.minute)).get_hour_factor(nnow=nnow), 0)
+        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow), 1)
+        self.assertGreater(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow+datetime.timedelta(minutes=9)),
+                           BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow+datetime.timedelta(minutes=12)))
+        self.assertGreater(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=9)),
+                           BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=12)))
 
     def test_021_rotate_cycle(self):
         logging_fileConfig(self.conf_file)
@@ -106,7 +106,7 @@ class TestCyclicEvent(JNTTBase):
         bus = FishtankBus(options=self.options)
         bus.nodeman=FakeNodeman()
         #~ bus.start(None)
-        bc = MoonComponent(bus=bus, cycle=28, current=0, min=0, max=1, options=self.options, node_uuid='fishtank__moon')
+        bc = MoonComponent(bus=bus, cycle=28, current=0, min=0, max=60, options=self.options, node_uuid='fishtank__moon')
         print bc.values['current'].get_data_index(node_uuid='moon', index=0)
         bc.current_rotate()
         print bc.values['current'].get_data_index(node_uuid='moon', index=0)
