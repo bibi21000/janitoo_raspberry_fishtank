@@ -10,13 +10,28 @@
     :target: https://coveralls.io/github/bibi21000/janitoo_raspberry_fishtank?branch=master
     :alt: Coveralls results
 
-===============
-The README file
-===============
+========
+Fishtank
+========
 
-This file will be published on your github account
+The first raspberry appliance server developped using Janitoo : a manager for your aquarium
 
 
-A section
-=========
-A text in this section.
+Needs
+=====
+
+- Sun and fullsun simulation
+- Moon simulation
+- Tides simulation
+- Heater thermostat
+- Water temperature
+- Ambiance temperature and humidity
+- Air flow
+
+Hardware
+========
+
+Onevire : water temperature
+dht : air and humidity
+i2c : pwm LED and DC pumps
+gpio : fullsun, heater, ...
