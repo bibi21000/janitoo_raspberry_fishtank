@@ -141,6 +141,7 @@ travis-deps: docker-deps
 	pip install coveralls
 	git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 	cd Adafruit_Python_DHT && ${PYTHON_EXEC} setup.py develop --force-test
+	pip install smbus-cffi
 	@echo
 	@echo "Travis dependencies for ${MODULENAME} installed."
 
