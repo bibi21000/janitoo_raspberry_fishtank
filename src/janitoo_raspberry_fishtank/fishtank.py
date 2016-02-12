@@ -42,6 +42,8 @@ from janitoo.bus import JNTBus
 
 from janitoo_raspberry_dht.dht import DHTComponent
 from janitoo_raspberry_i2c.bus_i2c import I2CBus
+from janitoo_raspberry_i2c_hat.bus_hat import MotorHatBus
+from janitoo_raspberry_i2c_hat.hat import DcMotorComponent as HatDcMotorComponent, LedComponent as HatLedComponent
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
@@ -93,6 +95,12 @@ def make_timelapse(**kwargs):
 def make_remote_node(**kwargs):
     return RemoteNodeComponent(**kwargs)
 
+def make_dcmotor(**kwargs):
+    return DcMotorComponent(**kwargs)
+
+def make_led(**kwargs):
+    return LedComponent(**kwargs)
+
 def make_thermostat(**kwargs):
     return ThermostatComponent(**kwargs)
 
@@ -109,11 +117,9 @@ class FishtankBus(JNTBus):
         JNTBus.__init__(self, **kwargs)
         self.buses = {}
         self.buses['owbus'] = OnewireBus(**kwargs)
-        self.buses['owbus'].export_values(self, prefix='w1_')
         self.buses['i2cbus'] = I2CBus(**kwargs)
-        self.buses['i2cbus'].export_values(self)
+        self.buses['i2chatbus'] = MotorHatBus(**kwargs)
         self.buses['thermal'] = ThermalBus(**kwargs)
-        self.buses['thermal'].export_values(self)
         self._fishtank_lock =  threading.Lock()
         self.check_timer = None
         uuid="timer_delay"
@@ -123,6 +129,10 @@ class FishtankBus(JNTBus):
             label='Timer.',
             default=45,
         )
+        self.buses['owbus'].export_values(self, prefix='w1_')
+        self.buses['i2cbus'].export_values(self, prefix='i2c_')
+        self.buses['i2chatbus'].export_values(self, prefix='hat_')
+        self.buses['thermal'].export_values(self, prefix='th_')
 
     def stop_check(self):
         """Check that the component is 'available'
@@ -176,8 +186,8 @@ class FishtankBus(JNTBus):
     def start(self, mqttc, trigger_thread_reload_cb=None):
         """Start the bus
         """
-        #~ for bus in self.buses:
-            #~ self.buses[bus].start(mqttc, trigger_thread_reload_cb=None)
+        for bus in self.buses:
+            self.buses[bus].start(mqttc, trigger_thread_reload_cb=None)
         JNTBus.start(self, mqttc, trigger_thread_reload_cb)
         self.on_check()
 
@@ -230,6 +240,30 @@ class AmbianceComponent(DHTComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
+class DcMotorComponent(HatDcMotorComponent):
+    """ A generic component for DC motor """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.dcmotor')
+        name = kwargs.pop('name', "DC Motor")
+        HatDcMotorComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
+class LedComponent(HatLedComponent):
+    """ A generic component for Led (PWM) """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.led')
+        name = kwargs.pop('name', "Led driver")
+        HatLedComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
 class TemperatureComponent(DS18B20):
     """ A generic component for gpio """
 
@@ -250,8 +284,9 @@ class BiocycleComponent(JNTComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.biocycle')
         name = kwargs.pop('name', "Bio cycle")
+        product_name = kwargs.pop('product_name', "Bio cycle simulator")
         JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name, hearbeat=60,
-                **kwargs)
+                product_name=product_name, **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
         uuid="cycle"
         self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,

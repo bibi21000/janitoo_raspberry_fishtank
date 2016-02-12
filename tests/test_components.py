@@ -99,3 +99,18 @@ class TestRemoteNodeComponent(JNTTComponent, JNTTComponentCommon):
     """Test the component
     """
     component_name = "fishtank.remote_node"
+
+class TestDcMotorComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.dcmotor"
+
+class TestLedComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.led"
+
+#~ class TestSwitchFullsunComponent(JNTTComponent, JNTTComponentCommon):
+    #~ """Test the component
+    #~ """
+    #~ component_name = "fishtank.switch_fullsun"
