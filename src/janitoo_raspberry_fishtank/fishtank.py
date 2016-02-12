@@ -117,9 +117,13 @@ class FishtankBus(JNTBus):
         JNTBus.__init__(self, **kwargs)
         self.buses = {}
         self.buses['owbus'] = OnewireBus(**kwargs)
+        self.buses['owbus'].export_values(self)
         self.buses['i2cbus'] = I2CBus(**kwargs)
+        self.buses['i2cbus'].export_values(self)
         self.buses['i2chatbus'] = MotorHatBus(**kwargs)
+        self.buses['i2chatbus'].export_values(self)
         self.buses['thermal'] = ThermalBus(**kwargs)
+        self.buses['thermal'].export_values(self)
         self._fishtank_lock =  threading.Lock()
         self.check_timer = None
         uuid="timer_delay"
@@ -129,10 +133,6 @@ class FishtankBus(JNTBus):
             label='Timer.',
             default=45,
         )
-        self.buses['owbus'].export_values(self, prefix='w1_')
-        self.buses['i2cbus'].export_values(self, prefix='i2c_')
-        self.buses['i2chatbus'].export_values(self, prefix='hat_')
-        self.buses['thermal'].export_values(self, prefix='th_')
 
     def stop_check(self):
         """Check that the component is 'available'
