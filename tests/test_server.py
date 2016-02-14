@@ -65,7 +65,25 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
     server_class = FishtankServer
     server_conf = "tests/data/janitoo_raspberry_fishtank.conf"
 
-    def test_120_server_start_no_error_in_log(self):
+    def test_101_wait_for_all_nodes(self):
+        self.start()
+        try:
+            self.assertHeartbeatNode(hadd=HADD%(222,0))
+            self.assertHeartbeatNode(hadd=HADD%(222,1))
+            self.assertHeartbeatNode(hadd=HADD%(222,2))
+            self.assertHeartbeatNode(hadd=HADD%(222,3))
+            self.assertHeartbeatNode(hadd=HADD%(222,4))
+            self.assertHeartbeatNode(hadd=HADD%(222,5))
+            self.assertHeartbeatNode(hadd=HADD%(222,6))
+            self.assertHeartbeatNode(hadd=HADD%(222,7))
+            self.assertHeartbeatNode(hadd=HADD%(222,8))
+            self.assertHeartbeatNode(hadd=HADD%(222,9))
+            self.assertHeartbeatNode(hadd=HADD%(222,10))
+            self.assertHeartbeatNode(hadd=HADD%(222,11))
+        finally:
+            self.stop()
+
+    def test_111_server_start_no_error_in_log(self):
         self.onlyRasperryTest()
         self.start()
         try:
@@ -75,3 +93,13 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
         finally:
             self.stop()
 
+    def test_112_request_nodes_and_values(self):
+        self.onlyRasperryTest()
+        self.start()
+        try:
+            self.assertHeartbeatNode()
+            time.sleep(5)
+            for request in NETWORK_REQUESTS:
+                self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid=request, node_hadd=HADD%(220,0), client_hadd=HADD%(9999,0))
+        finally:
+            self.stop()

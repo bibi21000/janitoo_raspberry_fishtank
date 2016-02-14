@@ -110,7 +110,7 @@ class TestLedComponent(JNTTComponent, JNTTComponentCommon):
     """
     component_name = "fishtank.led"
 
-#~ class TestSwitchFullsunComponent(JNTTComponent, JNTTComponentCommon):
-    #~ """Test the component
-    #~ """
-    #~ component_name = "fishtank.switch_fullsun"
+class TestSwitchFullsunComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.switch_fullsun"

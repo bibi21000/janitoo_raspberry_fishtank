@@ -47,10 +47,7 @@ from janitoo_raspberry_i2c_hat.hat import DcMotorComponent as HatDcMotorComponen
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
-#~ try:
-    #~ from janitoo_raspberry_gpio.gpio import OuputComponent
-#~ except RuntimeError:
-    #~ from janitoo.component import JNTComponent as OuputComponent
+from janitoo_raspberry_gpio.gpio import OutputComponent
 from janitoo_thermal.thermal import SimpleThermostatComponent, ThermalBus
 from janitoo.threads.remote import RemoteNodeComponent as RCNodeComponent
 
@@ -164,22 +161,25 @@ class FishtankBus(JNTBus):
                 logger.exception("Error in on_check")
             #Update the cycles
             try:
-                moonled = self.nodeman.find_node('moonled')
-                #Do something
-                sunled = self.nodeman.find_node('sunled')
-                #Do something
+                moon = self.nodeman.find_value('moon', 'factor_now')
+                moonled = self.nodeman.find_value('moonled', 'level')
+                max_moonled = self.nodeman.find_value('moonled', 'max_level')
+                moonled.data = max_moonled.data * moon.data
+                sun = self.nodeman.find_value('sun', 'factor_now')
+                sunled = self.nodeman.find_value('sunled', 'level')
+                max_sunled = self.nodeman.find_value('sunled', 'max_level')
+                sunled.data = max_sunled.data * sun.data
             except:
                 logger.exception("Error in on_check")
             #Update the fullsun
             try:
-                switch = self.nodeman.find_value('switch_fullsun', 'switchh')
-                factor = self.nodeman.find_value('sun', 'factor_now').data
-                if factor > 0.8:
+                switch = self.nodeman.find_value('switch_fullsun', 'state')
+                if sun.data > 0.8:
                     #Set fullsun on
-                    pass
-                elif factor < 0.79:
+                    switch.data = True
+                elif sun.data < 0.79:
                     #Set fullsun off
-                    pass
+                    switch.data = False
             except:
                 logger.exception("Error in on_check")
 
@@ -433,7 +433,7 @@ class BiocycleComponent(JNTComponent):
 
     def _get_factor(self, current, cycle):
         """Calculate the factor"""
-        return 2.0 * (current - (cycle / 2)) / cycle
+        return 2.0 * (current - (cycle / 2.0)) / cycle
 
     def get_cycle_factor(self, index=0):
         """Get the factor related to day cycle
@@ -511,17 +511,17 @@ class TideComponent(BiocycleComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-#~ class SwitchFullsunComponent(OutputComponent):
-    #~ """ A generic component for gpio """
-#~
-    #~ def __init__(self, bus=None, addr=None, **kwargs):
-        #~ """
-        #~ """
-        #~ oid = kwargs.pop('oid', 'fishtank.switch_fullsun')
-        #~ name = kwargs.pop('name', "Fullsun")
-        #~ OutputComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
-                #~ **kwargs)
-        #~ logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+class SwitchFullsunComponent(OutputComponent):
+    """ A generic component for gpio """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.switch_fullsun')
+        name = kwargs.pop('name', "Fullsun")
+        OutputComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class AirflowComponent(JNTComponent):
     """ A generic component for gpio """
