@@ -174,6 +174,7 @@ class FishtankBus(JNTBus):
             #Update the fullsun
             try:
                 switch = self.nodeman.find_value('switch_fullsun', 'state')
+                sun = self.nodeman.find_value('sun', 'factor_now')
                 if sun.data > 0.8:
                     #Set fullsun on
                     switch.data = True
