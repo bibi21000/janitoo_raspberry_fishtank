@@ -162,12 +162,12 @@ class FishtankBus(JNTBus):
             #Update the cycles
             try:
                 moon = self.nodeman.find_value('moon', 'factor_now')
-                moonled = self.nodeman.find_value('moonled', 'level')
-                max_moonled = self.nodeman.find_value('moonled', 'max_level')
+                moonled = self.nodeman.find_value('ledmoon', 'level')
+                max_moonled = self.nodeman.find_value('ledmoon', 'max_level')
                 moonled.data = max_moonled.data * moon.data
                 sun = self.nodeman.find_value('sun', 'factor_now')
-                sunled = self.nodeman.find_value('sunled', 'level')
-                max_sunled = self.nodeman.find_value('sunled', 'max_level')
+                sunled = self.nodeman.find_value('ledsun', 'level')
+                max_sunled = self.nodeman.find_value('ledsun', 'max_level')
                 sunled.data = max_sunled.data * sun.data
             except:
                 logger.exception("Error in on_check")
