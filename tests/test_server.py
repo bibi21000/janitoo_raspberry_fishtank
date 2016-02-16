@@ -94,7 +94,7 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
         self.start()
         try:
             self.assertHeartbeatNode()
-            time.sleep(10)
+            time.sleep(15)
             self.assertHeartbeatNode()
             for request in NETWORK_REQUESTS:
                 self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid=request, node_hadd=HADD%(222,0), client_hadd=HADD%(9999,0))
