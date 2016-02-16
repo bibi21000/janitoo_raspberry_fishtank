@@ -597,3 +597,4 @@ class ThermostatComponent(SimpleThermostatComponent):
         if state != onstate:
             heaters[0].set_cache(index=0, data=onstate)
             logger.debug("[%s] - [%s] --------------------------------- Update heater to onstate.", self.__class__.__name__, self.uuid)
+
