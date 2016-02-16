@@ -91,13 +91,13 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
             self.stop()
 
     def test_112_request_nodes_and_values(self):
-        self.onlyRasperryTest()
         self.start()
         try:
             self.assertHeartbeatNode()
-            time.sleep(15)
+            time.sleep(10)
+            self.assertHeartbeatNode()
             for request in NETWORK_REQUESTS:
                 self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid=request, node_hadd=HADD%(222,0), client_hadd=HADD%(9999,0))
-                time.sleep(2)
+                #~ time.sleep(2)
         finally:
             self.stop()
