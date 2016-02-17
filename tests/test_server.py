@@ -71,7 +71,7 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
         self.start()
         try:
             self.assertHeartbeatNodes(hadds=self.hadds)
-            time.sleep(60)
+            time.sleep(120)
             self.assertInLogfile('Found heartbeats in timeout')
             self.assertNotInLogfile('^ERROR ')
         finally:
