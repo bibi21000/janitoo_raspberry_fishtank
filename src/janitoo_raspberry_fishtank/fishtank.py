@@ -109,7 +109,6 @@ class FishtankBus(JNTBus):
     """
     def __init__(self, **kwargs):
         """
-        :param kwargs: parameters transmitted to :py:class:`smbus.SMBus` initializer
         """
         JNTBus.__init__(self, **kwargs)
         self.buses = {}
@@ -218,7 +217,7 @@ class FishtankBus(JNTBus):
             self.buses[bus].loop(stopevent)
 
 class RemoteNodeComponent(RCNodeComponent):
-    """ A generic component """
+    """ A remote component """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -230,7 +229,7 @@ class RemoteNodeComponent(RCNodeComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class AmbianceComponent(DHTComponent):
-    """ A generic component for ambiance """
+    """ A component for ambiance """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -242,7 +241,7 @@ class AmbianceComponent(DHTComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class DcMotorComponent(HatDcMotorComponent):
-    """ A generic component for DC motor """
+    """ A component for a DC motor """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -254,7 +253,7 @@ class DcMotorComponent(HatDcMotorComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class LedComponent(HatLedComponent):
-    """ A generic component for Led (PWM) """
+    """ A component for a Led driver (PWM) """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -266,7 +265,7 @@ class LedComponent(HatLedComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class TemperatureComponent(DS18B20):
-    """ A generic component for gpio """
+    """ A water temperature component """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -448,7 +447,7 @@ class BiocycleComponent(JNTComponent):
         return dlen
 
     def get_hour_factor(self, index=0, nnow=None):
-        """Get the factor according
+        """Get the factor
         """
         if nnow is None:
             nnow = datetime.datetime.now()
@@ -464,7 +463,7 @@ class BiocycleComponent(JNTComponent):
         return 1-abs(self._get_factor(int(elapsed), int(tdur)))
 
     def get_status(self, index=0, nnow=None):
-        """Get the factor according
+        """Get the current status
         """
         if nnow is None:
             nnow = datetime.datetime.now()
@@ -478,7 +477,7 @@ class BiocycleComponent(JNTComponent):
         return True
 
 class MoonComponent(BiocycleComponent):
-    """ A generic component for gpio """
+    """ A moon cycle component """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -489,7 +488,7 @@ class MoonComponent(BiocycleComponent):
                 **kwargs)
 
 class SunComponent(BiocycleComponent):
-    """ A generic component for gpio """
+    """ A sun cycle component """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -501,7 +500,7 @@ class SunComponent(BiocycleComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class TideComponent(BiocycleComponent):
-    """ A generic component for gpio """
+    """ A tide cycle component """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -513,7 +512,7 @@ class TideComponent(BiocycleComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class SwitchFullsunComponent(OutputComponent):
-    """ A generic component for gpio """
+    """ A GPIO Output component for the full sun"""
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -525,7 +524,7 @@ class SwitchFullsunComponent(OutputComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class AirflowComponent(JNTComponent):
-    """ A generic component for gpio """
+    """ A GPIO Output component for the air flow"""
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -537,7 +536,7 @@ class AirflowComponent(JNTComponent):
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
 class TimelapseComponent(JNTComponent):
-    """ A generic component for gpio """
+    """ A timelapse component """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
@@ -554,7 +553,7 @@ class TimelapseComponent(JNTComponent):
         return True
 
 class ThermostatComponent(SimpleThermostatComponent):
-    """ A thermostzt for water """
+    """ A thermostat for water """
 
     def __init__(self, bus=None, addr=None, **kwargs):
         """
