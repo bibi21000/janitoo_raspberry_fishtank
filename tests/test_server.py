@@ -65,18 +65,9 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
     def test_101_wait_for_all_nodes(self):
         self.start()
         try:
-            self.assertHeartbeatNode(hadd=HADD%(222,0))
-            self.assertHeartbeatNode(hadd=HADD%(222,1))
-            self.assertHeartbeatNode(hadd=HADD%(222,2))
-            self.assertHeartbeatNode(hadd=HADD%(222,3))
-            self.assertHeartbeatNode(hadd=HADD%(222,4))
-            self.assertHeartbeatNode(hadd=HADD%(222,5))
-            self.assertHeartbeatNode(hadd=HADD%(222,6))
-            self.assertHeartbeatNode(hadd=HADD%(222,7))
-            self.assertHeartbeatNode(hadd=HADD%(222,8))
-            self.assertHeartbeatNode(hadd=HADD%(222,9))
-            self.assertHeartbeatNode(hadd=HADD%(222,10))
-            self.assertHeartbeatNode(hadd=HADD%(222,11))
+            self.assertHeartbeatNodes(hadds=[HADD%(222,0), HADD%(222,1), HADD%(222,2), HADD%(222,3),
+                HADD%(222,4), HADD%(222,5), HADD%(222,6), HADD%(222,7), HADD%(222,8), HADD%(222,9),
+                HADD%(222,10), HADD%(222,11)])
         finally:
             self.stop()
 
