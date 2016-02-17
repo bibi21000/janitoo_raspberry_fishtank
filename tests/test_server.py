@@ -62,12 +62,14 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
     server_class = FishtankServer
     server_conf = "tests/data/janitoo_raspberry_fishtank.conf"
 
+    nodes = [HADD%(222,0), HADD%(222,1), HADD%(222,2), HADD%(222,3),
+             HADD%(222,4), HADD%(222,5), HADD%(222,6), HADD%(222,7), HADD%(222,8), HADD%(222,9),
+             HADD%(222,10), HADD%(222,11)]
+
     def test_101_wait_for_all_nodes(self):
         self.start()
         try:
-            self.assertHeartbeatNodes(hadds=[HADD%(222,0), HADD%(222,1), HADD%(222,2), HADD%(222,3),
-                HADD%(222,4), HADD%(222,5), HADD%(222,6), HADD%(222,7), HADD%(222,8), HADD%(222,9),
-                HADD%(222,10), HADD%(222,11)])
+            self.assertHeartbeatNodes(hadds=self.nodes)
         finally:
             self.stop()
 
@@ -75,6 +77,7 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
         self.onlyRasperryTest()
         self.start()
         try:
+            self.assertHeartbeatNodes(hadds=self.nodes)
             time.sleep(60)
             self.assertInLogfile('Found heartbeats in timeout')
             self.assertNotInLogfile('^ERROR ')
