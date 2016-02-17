@@ -61,6 +61,7 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
     broker_password = 'toto'
     server_class = FishtankServer
     server_conf = "tests/data/janitoo_raspberry_fishtank.conf"
+    hadd_ctrl = HADD%(222,0)
 
     nodes = [HADD%(222,0), HADD%(222,1), HADD%(222,2), HADD%(222,3),
              HADD%(222,4), HADD%(222,5), HADD%(222,6), HADD%(222,7), HADD%(222,8), HADD%(222,9),
@@ -87,9 +88,9 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
     def test_112_request_nodes_and_values(self):
         self.start()
         try:
-            self.assertHeartbeatNode()
-            time.sleep(15)
-            self.assertHeartbeatNode()
+            self.assertHeartbeatNode(hadd=self.hadd_ctrl)
+            time.sleep(5)
+            self.assertHeartbeatNode(hadd=self.hadd_ctrl)
             for request in NETWORK_REQUESTS:
                 self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid=request, node_hadd=HADD%(222,0), client_hadd=HADD%(9999,0))
                 #~ time.sleep(2)
