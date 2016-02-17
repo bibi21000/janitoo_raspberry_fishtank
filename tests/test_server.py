@@ -61,38 +61,19 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
     broker_password = 'toto'
     server_class = FishtankServer
     server_conf = "tests/data/janitoo_raspberry_fishtank.conf"
-    hadd_ctrl = HADD%(222,0)
 
-    nodes = [HADD%(222,0), HADD%(222,1), HADD%(222,2), HADD%(222,3),
+    hadds = [HADD%(222,0), HADD%(222,1), HADD%(222,2), HADD%(222,3),
              HADD%(222,4), HADD%(222,5), HADD%(222,6), HADD%(222,7), HADD%(222,8), HADD%(222,9),
              HADD%(222,10), HADD%(222,11)]
-
-    def test_101_wait_for_all_nodes(self):
-        self.start()
-        try:
-            self.assertHeartbeatNodes(hadds=self.nodes)
-        finally:
-            self.stop()
 
     def test_111_server_start_no_error_in_log(self):
         self.onlyRasperryTest()
         self.start()
         try:
-            self.assertHeartbeatNodes(hadds=self.nodes)
+            self.assertHeartbeatNodes(hadds=self.hadds)
             time.sleep(60)
             self.assertInLogfile('Found heartbeats in timeout')
             self.assertNotInLogfile('^ERROR ')
         finally:
             self.stop()
 
-    def test_112_request_nodes_and_values(self):
-        self.start()
-        try:
-            self.assertHeartbeatNode(hadd=self.hadd_ctrl)
-            time.sleep(5)
-            self.assertHeartbeatNode(hadd=self.hadd_ctrl)
-            for request in NETWORK_REQUESTS:
-                self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid=request, node_hadd=HADD%(222,0), client_hadd=HADD%(9999,0))
-                #~ time.sleep(2)
-        finally:
-            self.stop()
