@@ -157,7 +157,7 @@ class FishtankBus(JNTBus):
                 if temp2 is None or temp2.data is None:
                     logger.warning('temp2 problem')
             except:
-                logger.exception("Error in on_check")
+                logger.exception("[%s] - Error in on_check", self.__class__.__name__)
             #Update the cycles
             try:
                 moon = self.nodeman.find_value('moon', 'factor_now')
@@ -169,7 +169,7 @@ class FishtankBus(JNTBus):
                 max_sunled = self.nodeman.find_value('ledsun', 'max_level')
                 sunled.data = max_sunled.data * sun.data
             except:
-                logger.exception("Error in on_check")
+                logger.exception("[%s] - Error in on_check", self.__class__.__name__)
             #Update the fullsun
             try:
                 switch = self.nodeman.find_value('switch_fullsun', 'state')
@@ -181,7 +181,7 @@ class FishtankBus(JNTBus):
                     #Set fullsun off
                     switch.data = False
             except:
-                logger.exception("Error in on_check")
+                logger.exception("[%s] - Error in on_check", self.__class__.__name__)
 
     def start(self, mqttc, trigger_thread_reload_cb=None):
         """Start the bus
