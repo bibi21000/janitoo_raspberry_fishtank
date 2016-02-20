@@ -66,7 +66,7 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
              HADD%(222,4), HADD%(222,5), HADD%(222,6), HADD%(222,7), HADD%(222,8), HADD%(222,9),
              HADD%(222,10), HADD%(222,11)]
 
-    def test_111_server_start_no_error_in_log(self):
+    def test_101_server_start_no_error_in_log(self):
         self.onlyRasperryTest()
         self.start()
         try:
