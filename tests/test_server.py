@@ -71,4 +71,4 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
 
     def test_040_server_start_no_error_in_log(self):
         self.onlyRasperryTest()
-        JNTTServer.test_040_server_start_no_error_in_log(self)
+        JNTTServerCommon.test_040_server_start_no_error_in_log(self)
