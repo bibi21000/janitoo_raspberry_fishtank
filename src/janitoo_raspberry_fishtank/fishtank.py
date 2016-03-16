@@ -47,7 +47,7 @@ from janitoo_raspberry_i2c_hat.hat import DcMotorComponent as HatDcMotorComponen
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
-from janitoo_raspberry_gpio.gpio import OutputComponent
+from janitoo_raspberry_gpio.gpio import OutputComponent; PirComponent as PirGPIOComponent
 from janitoo_thermal.thermal import SimpleThermostatComponent, ThermalBus
 from janitoo.threads.remote import RemoteNodeComponent as RCNodeComponent
 
@@ -103,6 +103,9 @@ def make_thermostat(**kwargs):
 
 def make_switch_fullsun(**kwargs):
     return SwitchFullsunComponent(**kwargs)
+
+def make_pir(**kwargs):
+    return PirComponent(**kwargs)
 
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
@@ -261,6 +264,18 @@ class LedComponent(HatLedComponent):
         oid = kwargs.pop('oid', 'fishtank.led')
         name = kwargs.pop('name', "Led driver")
         HatLedComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
+class PirComponent(PirGPIOComponent):
+    """ A Pir component """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.pir')
+        name = kwargs.pop('name', "PIR sensor")
+        DS18B20.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
