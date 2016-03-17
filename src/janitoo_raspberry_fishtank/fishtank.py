@@ -47,7 +47,7 @@ from janitoo_raspberry_i2c_hat.hat import DcMotorComponent as HatDcMotorComponen
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
-from janitoo_raspberry_gpio.gpio import OutputComponent; PirComponent as PirGPIOComponent
+from janitoo_raspberry_gpio.gpio import GpioBus, OutputComponent, PirComponent as PirGPIOComponent, SonicComponent as SonicGPIOComponent
 from janitoo_thermal.thermal import SimpleThermostatComponent, ThermalBus
 from janitoo.threads.remote import RemoteNodeComponent as RCNodeComponent
 
@@ -107,6 +107,9 @@ def make_switch_fullsun(**kwargs):
 def make_pir(**kwargs):
     return PirComponent(**kwargs)
 
+def make_sonic(**kwargs):
+    return SonicComponent(**kwargs)
+
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
     """
@@ -117,6 +120,8 @@ class FishtankBus(JNTBus):
         self.buses = {}
         self.buses['owbus'] = OnewireBus(**kwargs)
         self.buses['owbus'].export_values(self)
+        self.buses['gpiobus'] = GpioBus(**kwargs)
+        self.buses['gpiobus'].export_values(self)
         self.buses['i2cbus'] = I2CBus(**kwargs)
         self.buses['i2cbus'].export_values(self)
         self.buses['i2chatbus'] = MotorHatBus(**kwargs)
@@ -192,6 +197,7 @@ class FishtankBus(JNTBus):
         for bus in self.buses:
             self.buses[bus].start(mqttc, trigger_thread_reload_cb=None)
         JNTBus.start(self, mqttc, trigger_thread_reload_cb)
+	self.gpio = self.buses['gpiobus'].gpio
         self.on_check()
 
     def stop(self):
@@ -275,9 +281,22 @@ class PirComponent(PirGPIOComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.pir')
         name = kwargs.pop('name', "PIR sensor")
-        DS18B20.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        PirGPIOComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
+class SonicComponent(SonicGPIOComponent):
+    """ A Sonic component """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.pir')
+        name = kwargs.pop('name', "PIR sensor")
+        SonicGPIOComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
 
 class TemperatureComponent(DS18B20):
     """ A water temperature component """

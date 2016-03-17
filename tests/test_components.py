@@ -88,6 +88,11 @@ class TestTideComponent(JNTTComponent, JNTTComponentCommon):
     """
     component_name = "fishtank.tide"
 
+class TestPirComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.pir"
+
 class TestAirflowComponent(JNTTComponent, JNTTComponentCommon):
     """Test the component
     """
@@ -117,3 +122,13 @@ class TestSwitchFullsunComponent(JNTTComponent, JNTTComponentCommon):
     """Test the component
     """
     component_name = "fishtank.switch_fullsun"
+
+class TestPirComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.pir"
+
+class TestSonicComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.sonic"
