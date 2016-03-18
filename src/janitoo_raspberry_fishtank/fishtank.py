@@ -285,12 +285,11 @@ class SonicComponent(SonicGPIOComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.pir')
-        name = kwargs.pop('name', "PIR sensor")
+        oid = kwargs.pop('oid', 'fishtank.sonic')
+        name = kwargs.pop('name', "Sonic sensor")
         SonicGPIOComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
-
 
 class TemperatureComponent(DS18B20):
     """ A water temperature component """
