@@ -118,16 +118,11 @@ class FishtankBus(JNTBus):
         """
         JNTBus.__init__(self, **kwargs)
         self.buses = {}
-        self.buses['owbus'] = OnewireBus(**kwargs)
-        self.buses['owbus'].export_values(self)
-        self.buses['gpiobus'] = GpioBus(**kwargs)
-        self.buses['gpiobus'].export_values(self)
-        self.buses['i2cbus'] = I2CBus(**kwargs)
-        self.buses['i2cbus'].export_values(self)
-        self.buses['i2chatbus'] = MotorHatBus(**kwargs)
-        self.buses['i2chatbus'].export_values(self)
-        self.buses['thermal'] = ThermalBus(**kwargs)
-        self.buses['thermal'].export_values(self)
+        self.buses['owbus'] = OnewireBus(masters=[self], **kwargs)
+        self.buses['gpiobus'] = GpioBus(masters=[self], **kwargs)
+        self.buses['i2cbus'] = I2CBus(masters=[self], **kwargs)
+        self.buses['i2chatbus'] = MotorHatBus(masters=[self], **kwargs)
+        self.buses['thermal'] = ThermalBus(masters=[self], **kwargs)
         self._fishtank_lock =  threading.Lock()
         self.check_timer = None
         uuid="timer_delay"
@@ -197,7 +192,6 @@ class FishtankBus(JNTBus):
         for bus in self.buses:
             self.buses[bus].start(mqttc, trigger_thread_reload_cb=None)
         JNTBus.start(self, mqttc, trigger_thread_reload_cb)
-	self.gpio = self.buses['gpiobus'].gpio
         self.on_check()
 
     def stop(self):
@@ -233,7 +227,7 @@ class RemoteNodeComponent(RCNodeComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.remote_node')
         name = kwargs.pop('name', "Remote node")
-        RemoteNodeComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        RCNodeComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
