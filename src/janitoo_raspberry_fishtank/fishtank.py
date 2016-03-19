@@ -42,8 +42,8 @@ from janitoo.bus import JNTBus
 
 from janitoo_raspberry_dht.dht import DHTComponent
 from janitoo_raspberry_i2c.bus_i2c import I2CBus
-from janitoo_raspberry_i2c_hat.bus_hat import MotorHatBus
-from janitoo_raspberry_i2c_hat.hat import DcMotorComponent as HatDcMotorComponent, LedComponent as HatLedComponent
+from janitoo_raspberry_i2c_pca9685.bus_pca9685 import Pca9685Bus
+from janitoo_raspberry_i2c_pca9685.pca9685 import DcMotorComponent as Pca9685DcMotorComponent, LedComponent as Pca9685LedComponent
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
@@ -121,7 +121,7 @@ class FishtankBus(JNTBus):
         self.buses['owbus'] = OnewireBus(masters=[self], **kwargs)
         self.buses['gpiobus'] = GpioBus(masters=[self], **kwargs)
         self.buses['i2cbus'] = I2CBus(masters=[self], **kwargs)
-        self.buses['i2chatbus'] = MotorHatBus(masters=[self], **kwargs)
+        self.buses['i2cpca9685bus'] = Pca9685Bus(masters=[self], **kwargs)
         self.buses['thermal'] = ThermalBus(masters=[self], **kwargs)
         self._fishtank_lock =  threading.Lock()
         self.check_timer = None
@@ -243,7 +243,7 @@ class AmbianceComponent(DHTComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-class DcMotorComponent(HatDcMotorComponent):
+class DcMotorComponent(Pca9685DcMotorComponent):
     """ A component for a DC motor """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -251,11 +251,11 @@ class DcMotorComponent(HatDcMotorComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.dcmotor')
         name = kwargs.pop('name', "DC Motor")
-        HatDcMotorComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        Pca9685DcMotorComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-class LedComponent(HatLedComponent):
+class LedComponent(Pca9685LedComponent):
     """ A component for a Led driver (PWM) """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -263,7 +263,7 @@ class LedComponent(HatLedComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.led')
         name = kwargs.pop('name', "Led driver")
-        HatLedComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        Pca9685LedComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
