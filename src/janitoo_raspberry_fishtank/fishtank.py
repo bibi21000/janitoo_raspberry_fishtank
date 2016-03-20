@@ -43,7 +43,7 @@ from janitoo.bus import JNTBus
 from janitoo_raspberry_dht.dht import DHTComponent
 from janitoo_raspberry_i2c.bus_i2c import I2CBus
 from janitoo_raspberry_i2c_pca9685.bus_pca9685 import Pca9685Bus
-from janitoo_raspberry_i2c_pca9685.pca9685 import DcMotorComponent as Pca9685DcMotorComponent, LedComponent as Pca9685LedComponent
+from janitoo_raspberry_i2c_pca9685.pca9685 import PwmComponent
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
