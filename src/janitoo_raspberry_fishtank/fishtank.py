@@ -43,7 +43,7 @@ from janitoo.bus import JNTBus
 from janitoo_raspberry_dht.dht import DHTComponent
 from janitoo_raspberry_i2c.bus_i2c import I2CBus
 from janitoo_raspberry_i2c_pca9685.bus_pca9685 import Pca9685Bus
-from janitoo_raspberry_i2c_pca9685.pca9685 import PwmComponent
+from janitoo_raspberry_i2c_pca9685.pca9685 import PwmComponent as Pca9685PwmComponent, DcMotorComponent as Pca9685DcMotorComponent
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
@@ -255,7 +255,7 @@ class DcMotorComponent(Pca9685DcMotorComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-class LedComponent(Pca9685LedComponent):
+class LedComponent(Pca9685PwmComponent):
     """ A component for a Led driver (PWM) """
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -263,7 +263,7 @@ class LedComponent(Pca9685LedComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.led')
         name = kwargs.pop('name', "Led driver")
-        Pca9685LedComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        Pca9685PwmComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
