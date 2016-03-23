@@ -47,6 +47,7 @@ from janitoo_raspberry_i2c_pca9685.pca9685 import PwmComponent as Pca9685PwmComp
 #~ from janitoo_raspberry_camera.camera import CameraBus
 from janitoo_raspberry_1wire.bus_1wire import OnewireBus
 from janitoo_raspberry_1wire.components import DS18B20
+from janitoo_raspberry_ili9341.ili9341 import ScreenComponent as IliScreenComponent
 from janitoo_raspberry_gpio.gpio import GpioBus, OutputComponent, PirComponent as PirGPIOComponent, SonicComponent as SonicGPIOComponent
 from janitoo_thermal.thermal import SimpleThermostatComponent, ThermalBus
 from janitoo.threads.remote import RemoteNodeComponent as RCNodeComponent
@@ -109,6 +110,9 @@ def make_pir(**kwargs):
 
 def make_sonic(**kwargs):
     return SonicComponent(**kwargs)
+
+def make_screen(**kwargs):
+    return ScreenComponent(**kwargs)
 
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
@@ -571,6 +575,23 @@ class TimelapseComponent(JNTComponent):
         oid = kwargs.pop('oid', 'fishtank.timelapse')
         name = kwargs.pop('name', "Timelapse")
         JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+                **kwargs)
+        logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
+
+    def check_heartbeat(self):
+        """Check that the component is 'available'
+        """
+        return True
+
+class ScreenComponent(IliScreenComponent):
+    """ A timelapse component """
+
+    def __init__(self, bus=None, addr=None, **kwargs):
+        """
+        """
+        oid = kwargs.pop('oid', 'fishtank.screen')
+        name = kwargs.pop('name', "Screen")
+        IliScreenComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 

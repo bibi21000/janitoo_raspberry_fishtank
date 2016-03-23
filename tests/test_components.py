@@ -132,3 +132,8 @@ class TestSonicComponent(JNTTComponent, JNTTComponentCommon):
     """Test the component
     """
     component_name = "fishtank.sonic"
+
+class TestScreenComponent(JNTTComponent, JNTTComponentCommon):
+    """Test the component
+    """
+    component_name = "fishtank.screen"
