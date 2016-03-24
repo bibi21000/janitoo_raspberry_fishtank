@@ -76,6 +76,7 @@ janitoo_entry_points = {
         "fishtank.led = janitoo_raspberry_fishtank.fishtank:make_led",
         "fishtank.pir = janitoo_raspberry_fishtank.fishtank:make_pir",
         "fishtank.sonic = janitoo_raspberry_fishtank.fishtank:make_sonic",
+        "fishtank.screen = janitoo_raspberry_fishtank.fishtank:make_screen",
     ],
 }
 
