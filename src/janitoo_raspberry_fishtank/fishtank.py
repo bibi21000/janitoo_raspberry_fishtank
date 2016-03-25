@@ -554,7 +554,7 @@ class SwitchFullsunComponent(OutputComponent):
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
-class AirflowComponent(JNTComponent):
+class AirflowComponent(OutputComponent):
     """ A GPIO Output component for the air flow"""
 
     def __init__(self, bus=None, addr=None, **kwargs):
@@ -562,7 +562,7 @@ class AirflowComponent(JNTComponent):
         """
         oid = kwargs.pop('oid', 'fishtank.airflow')
         name = kwargs.pop('name', "Air flow")
-        JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
+        OutputComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
         logger.debug("[%s] - __init__ node uuid:%s", self.__class__.__name__, self.uuid)
 
