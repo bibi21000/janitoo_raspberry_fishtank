@@ -121,6 +121,7 @@ setup(
                      'janitoo_raspberry_camera',
                      'janitoo_raspberry_1wire',
                      'janitoo_raspberry_ili9341',
+                     'janitoo_events',
                      'janitoo_thermal',
                     ],
     dependency_links = [
@@ -134,6 +135,7 @@ setup(
       'https://github.com/bibi21000/janitoo_raspberry_camera/archive/master.zip#egg=janitoo_raspberry_camera',
       'https://github.com/bibi21000/janitoo_raspberry_ili9341/archive/master.zip#egg=janitoo_raspberry_ili9341',
       'https://github.com/bibi21000/janitoo_thermal/archive/master.zip#egg=janitoo_thermal',
+      'https://github.com/bibi21000/janitoo_events/archive/master.zip#egg=janitoo_events',
     ],
     entry_points = janitoo_entry_points,
 )
