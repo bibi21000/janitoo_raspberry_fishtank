@@ -51,7 +51,7 @@ from janitoo.utils import TOPIC_BROADCAST_REPLY, TOPIC_BROADCAST_REQUEST
 from janitoo.options import JNTOptions
 from janitoo.runner import jnt_parse_args
 
-from janitoo_raspberry_fishtank.fishtank import FishtankBus, BiocycleComponent, MoonComponent
+from janitoo_raspberry_fishtank.fishtank import FishtankBus, MoonComponent
 
 ##############################################################
 #Check that we are in sync with the official command classes
@@ -71,35 +71,6 @@ class TestCyclicEvent(JNTTBase):
     """
     conf_file = "tests/data/janitoo_raspberry_fishtank.conf"
     prog = 'test'
-
-    def test_001_get_cycle_factor(self):
-        self.assertEqual(BiocycleComponent(cycle=28, current=0).get_cycle_factor(), -1)
-        self.assertEqual(BiocycleComponent(cycle=28, current=14).get_cycle_factor(), 0)
-        self.assertEqual(BiocycleComponent(cycle=28, current=28).get_cycle_factor(), 1)
-        self.assertEqual(BiocycleComponent(cycle=28, current=0).get_cycle_factor(),BiocycleComponent(cycle=280, current=0).get_cycle_factor())
-        self.assertEqual(BiocycleComponent(cycle=28, current=14).get_cycle_factor(),BiocycleComponent(cycle=280, current=140).get_cycle_factor())
-        self.assertEqual(BiocycleComponent(cycle=28, current=28).get_cycle_factor(),BiocycleComponent(cycle=280, current=280).get_cycle_factor())
-        self.assertEqual(BiocycleComponent(cycle=28, current=18).get_cycle_factor(),BiocycleComponent(cycle=280, current=180).get_cycle_factor())
-        self.assertEqual(BiocycleComponent(cycle=28, current=7).get_cycle_factor(),BiocycleComponent(cycle=280, current=70).get_cycle_factor())
-
-    def test_001_get_cycle_duration(self):
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60).get_cycle_duration(), 60)
-        self.assertEqual(BiocycleComponent(cycle=28, current=14, min=0, max=60).get_cycle_duration(), 0)
-        self.assertEqual(BiocycleComponent(cycle=28, current=28, min=0, max=60).get_cycle_duration(), 60)
-        self.assertEqual(BiocycleComponent(cycle=28, current=18, min=0, max=60).get_cycle_duration(),BiocycleComponent(cycle=280, current=180, min=0, max=60).get_cycle_duration())
-        self.assertEqual(BiocycleComponent(cycle=28, current=7, min=0, max=60).get_cycle_duration(),BiocycleComponent(cycle=280, current=70, min=0, max=60).get_cycle_duration())
-        self.assertEqual(BiocycleComponent(cycle=28, current=18, min=60, max=180).get_cycle_duration(),BiocycleComponent(cycle=280, current=180, min=60, max=180).get_cycle_duration())
-        self.assertEqual(BiocycleComponent(cycle=28, current=7, min=120, max=420).get_cycle_duration(),BiocycleComponent(cycle=280, current=70, min=120, max=420).get_cycle_duration())
-
-    def test_011_factor_middle_cycle(self):
-        nnow = datetime.datetime.now()
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%((nnow-datetime.timedelta(hours=1)).hour,nnow.minute)).get_hour_factor(nnow=nnow), 0)
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%((nnow+datetime.timedelta(hours=1)).hour,nnow.minute)).get_hour_factor(nnow=nnow), 0)
-        self.assertEqual(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow), 1)
-        self.assertGreater(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow+datetime.timedelta(minutes=9)),
-                           BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow+datetime.timedelta(minutes=12)))
-        self.assertGreater(BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=9)),
-                           BiocycleComponent(cycle=28, current=0, min=0, max=60, midi="%s:%s"%(nnow.hour,nnow.minute)).get_hour_factor(nnow=nnow-datetime.timedelta(minutes=12)))
 
     def test_021_rotate_cycle(self):
         logging_fileConfig(self.conf_file)
