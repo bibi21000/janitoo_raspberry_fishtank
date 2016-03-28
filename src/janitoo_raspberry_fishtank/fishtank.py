@@ -50,7 +50,7 @@ from janitoo_raspberry_1wire.components import DS18B20
 from janitoo_raspberry_ili9341.ili9341 import ScreenComponent as IliScreenComponent
 from janitoo_raspberry_gpio.gpio import GpioBus, OutputComponent, PirComponent as PirGPIOComponent, SonicComponent as SonicGPIOComponent
 from janitoo_thermal.thermal import SimpleThermostatComponent, ThermalBus
-from janitoo_events.components import BiocycleComponent
+from janitoo_events.component import BiocycleComponent
 from janitoo_events.thread import EventsBus
 from janitoo_factory.threads.remote import RemoteNodeComponent as RCNodeComponent
 
