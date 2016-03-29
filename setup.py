@@ -112,7 +112,8 @@ setup(
     include_package_data=True,
     data_files = data_files,
     install_requires=[
-                     'janitoo >= %s'%"0.0.6",
+                     'janitoo',
+                     'janitoo_factory',
                      'janitoo_raspberry',
                      'janitoo_raspberry_dht',
                      'janitoo_raspberry_i2c',
@@ -125,7 +126,8 @@ setup(
                      'janitoo_thermal',
                     ],
     dependency_links = [
-      'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo-%s'%"0.0.7",
+      'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo',
+      'https://github.com/bibi21000/janitoo_factory/archive/master.zip#egg=janitoo_factory',
       'https://github.com/bibi21000/janitoo_raspberry/archive/master.zip#egg=janitoo_raspberry',
       'https://github.com/bibi21000/janitoo_raspberry_dht/archive/master.zip#egg=janitoo_raspberry_dht',
       'https://github.com/bibi21000/janitoo_raspberry_i2c/archive/master.zip#egg=janitoo_raspberry_i2c',
