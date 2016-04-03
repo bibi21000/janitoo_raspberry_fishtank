@@ -69,6 +69,18 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
              HADD%(222,4), HADD%(222,5), HADD%(222,6), HADD%(222,7), HADD%(222,8), HADD%(222,9),
              HADD%(222,10), HADD%(222,11)]
 
+    def test_011_start_reload_stop(self):
+        self.skipRasperryTest()
+        JNTTServerCommon.test_011_start_reload_stop(self)
+
+    def test_012_start_reload_threads_stop(self):
+        self.skipRasperryTest()
+        JNTTServerCommon.test_012_start_reload_threads_stop(self)
+
+    def test_030_wait_for_all_nodes(self):
+        self.skipRasperryTest()
+        JNTTServerCommon.test_030_wait_for_all_nodes(self)
+
     def test_040_server_start_no_error_in_log(self):
         self.onlyRasperryTest()
         JNTTServerCommon.test_040_server_start_no_error_in_log(self)
