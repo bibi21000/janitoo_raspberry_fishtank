@@ -167,16 +167,16 @@ class FishtankBus(JNTBus):
                 moon = self.nodeman.find_value('moon', 'factor_now')
                 moonled = self.nodeman.find_value('ledmoon', 'level')
                 max_moonled = self.nodeman.find_value('ledmoon', 'max_level')
-                moonled.data = max_moonled.data * moon.data
+                moonled.data = int(max_moonled.data * moon.data)
                 sun = self.nodeman.find_value('sun', 'factor_now')
                 sunled = self.nodeman.find_value('ledsun', 'level')
                 max_sunled = self.nodeman.find_value('ledsun', 'max_level')
-                sunled.data = max_sunled.data * sun.data
+                sunled.data = int(max_sunled.data * sun.data)
             except:
                 logger.exception("[%s] - Error in on_check", self.__class__.__name__)
             #Update the fullsun
             try:
-                switch = self.nodeman.find_value('switch', 'state')
+                switch = self.nodeman.find_value('switch_fullsun', 'switch')
                 sun = self.nodeman.find_value('sun', 'factor_now')
                 if sun.data > 0.8:
                     #Set fullsun on
