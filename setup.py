@@ -63,7 +63,6 @@ janitoo_entry_points = {
     "janitoo.components": [
         "fishtank.ambiance = janitoo_raspberry_fishtank.fishtank:make_ambiance",
         "fishtank.temperature = janitoo_raspberry_fishtank.fishtank:make_temperature",
-        "fishtank.biocycle = janitoo_raspberry_fishtank.fishtank:make_biocycle",
         "fishtank.moon = janitoo_raspberry_fishtank.fishtank:make_moon",
         "fishtank.sun = janitoo_raspberry_fishtank.fishtank:make_sun",
         "fishtank.tide = janitoo_raspberry_fishtank.fishtank:make_tide",
