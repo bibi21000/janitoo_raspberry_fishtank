@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The Raspberry http thread
-
-Server files using the http protocol
+"""The Raspberry fishtank
 
 """
 
@@ -159,7 +157,7 @@ class FishtankBus(JNTBus):
                 temp1 = self.nodeman.find_value('surftemp', 'temperature')
                 if temp1 is None or temp1.data is None:
                     logger.warning('temp1 problemm')
-                temp2 = self.nodeman.find_value('deeptemp', 'temperature').data
+                temp2 = self.nodeman.find_value('deeptemp', 'temperature')
                 if temp2 is None or temp2.data is None:
                     logger.warning('temp2 problem')
             except:
@@ -178,14 +176,14 @@ class FishtankBus(JNTBus):
                 logger.exception("[%s] - Error in on_check", self.__class__.__name__)
             #Update the fullsun
             try:
-                switch = self.nodeman.find_value('switch_fullsun', 'state')
+                switch = self.nodeman.find_value('switch', 'state')
                 sun = self.nodeman.find_value('sun', 'factor_now')
                 if sun.data > 0.8:
                     #Set fullsun on
-                    switch.data = True
+                    switch.data = 'on'
                 elif sun.data < 0.79:
                     #Set fullsun off
-                    switch.data = False
+                    switch.data = 'on'
             except:
                 logger.exception("[%s] - Error in on_check", self.__class__.__name__)
 
