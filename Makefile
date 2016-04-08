@@ -53,7 +53,7 @@ NOSEDOCKER     = --cover-package=${NOSEMODULES},${MODULENAME} --with-coverage --
 NOSECOVER     = --cover-package=${NOSEMODULES},${MODULENAME} --with-coverage --cover-inclusive --cover-html --cover-html-dir=${BUILDDIR}/docs/html/tools/coverage --with-html --html-file=${BUILDDIR}/docs/html/tools/nosetests/index.html
 NOSEDOCKER     = --cover-package=${NOSEMODULES},${MODULENAME} --with-coverage --cover-inclusive
 
-.PHONY: help check-tag clean all build develop install uninstall clean-doc doc certification tests pylint deps
+.PHONY: help check-tag clean all build develop install uninstall clean-doc doc certification tests pylint deps docker-tests
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
