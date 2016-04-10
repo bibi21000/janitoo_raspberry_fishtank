@@ -160,6 +160,7 @@ class FishtankBus(JNTBus):
                     logger.warning('temp2 problem')
             except:
                 logger.exception("[%s] - Error in on_check", self.__class__.__name__)
+        if self.nodeman.is_started:
             #Update the cycles
             try:
                 moon = self.nodeman.find_value('moon', 'factor_now')
@@ -172,6 +173,7 @@ class FishtankBus(JNTBus):
                 sunled.data = int(max_sunled.data * sun.data)
             except:
                 logger.exception("[%s] - Error in on_check", self.__class__.__name__)
+        if self.nodeman.is_started:
             #Update the fullsun
             try:
                 switch = self.nodeman.find_value('switch_fullsun', 'switch')
