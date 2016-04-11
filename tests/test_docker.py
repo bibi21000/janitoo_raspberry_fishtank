@@ -43,7 +43,7 @@ from janitoo.utils import HADD_SEP, HADD
 
 from janitoo_raspberry_fishtank.server import FishtankServer
 
-class TestPiSerser(JNTTDockerServer, JNTTDockerServerCommon):
+class TestRaspberryFishtankSerser(JNTTDockerServer, JNTTDockerServerCommon):
     """Test the server
     """
     loglevel = logging.DEBUG
