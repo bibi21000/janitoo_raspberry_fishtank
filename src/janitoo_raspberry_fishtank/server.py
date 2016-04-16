@@ -39,6 +39,7 @@ from pkg_resources import get_distribution, DistributionNotFound
 from janitoo.mqtt import MQTTClient
 from janitoo.server import JNTServer, JNTControllerManager
 from janitoo.utils import JanitooException
+from janitoo_raspberry.server import PiServer
 
 ##############################################################
 #Check that we are in sync with the official command classes
@@ -54,32 +55,8 @@ assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 assert(COMMAND_DESC[COMMAND_UPDATE] == 'COMMAND_UPDATE')
 ##############################################################
 
-class FishtankServer(JNTServer, JNTControllerManager):
+class FishtankServer(PiServer):
     """The Raspberry pi Server
 
     """
-    def __init__(self, options, check_plateform=False):
-        """
-        """
-        #Check that we are on a raspberry
-        if check_plateform==True and not platform.machine().startswith('armv6'):
-            raise JanitooException(message='This server can be used on Raspberry Pi only')
-        JNTServer.__init__(self, options)
-        self.section = "raspi"
-        JNTControllerManager.__init__(self)
-
-
-    def start(self):
-        """Start the Server
-        """
-        JNTServer.start(self)
-        JNTControllerManager.start_controller(self, self.section, self.options, cmd_classes=[COMMAND_UPDATE], hadd=None, name="Raspberry Fishtank Server",
-            product_name="Raspberry Fishtank Server", product_type="Raspberry Fishtank Server")
-        JNTControllerManager.start_controller_timer(self)
-
-    def stop(self):
-        """Stop the Server
-        """
-        JNTControllerManager.stop_controller_timer(self)
-        JNTControllerManager.stop_controller(self)
-        JNTServer.stop(self)
+    pass
