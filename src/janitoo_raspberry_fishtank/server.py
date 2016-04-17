@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 """The Raspberry server
-
-Define one controller
-A node for camera
-A node with multiple vales or multiple nodes for i2c
-...
 """
 
 __license__ = """
