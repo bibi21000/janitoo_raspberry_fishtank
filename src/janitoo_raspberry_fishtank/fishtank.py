@@ -208,8 +208,8 @@ class FishtankBus(JNTBus):
 
         """
         res = True
-        for bus in self.buses:
-            res = res and self.buses[bus].check_heartbeat()
+        #~ for bus in self.buses:
+            #~ res = res and self.buses[bus].check_heartbeat()
         return res
 
     def loop(self, stopevent):
