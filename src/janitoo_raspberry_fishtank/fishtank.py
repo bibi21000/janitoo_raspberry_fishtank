@@ -39,6 +39,7 @@ from janitoo.component import JNTComponent
 from janitoo.bus import JNTBus
 
 from janitoo_raspberry_dht.dht import DHTComponent
+from janitoo_raspberry_spi.bus_spi import SPIBus
 from janitoo_raspberry_i2c.bus_i2c import I2CBus
 from janitoo_raspberry_i2c_pca9685.pca9685 import PwmComponent as Pca9685PwmComponent, DcMotorComponent as Pca9685DcMotorComponent
 #~ from janitoo_raspberry_camera.camera import CameraBus
@@ -120,6 +121,7 @@ class FishtankBus(JNTBus):
         self.buses = {}
         self.buses['owbus'] = OnewireBus(masters=[self], **kwargs)
         self.buses['gpiobus'] = GpioBus(masters=[self], **kwargs)
+        self.buses['spibus'] = SPIBus(masters=[self], **kwargs)
         self.buses['i2cbus'] = I2CBus(masters=[self], **kwargs)
         self.buses['thermal'] = ThermalBus(masters=[self], **kwargs)
         self._fishtank_lock =  threading.Lock()
