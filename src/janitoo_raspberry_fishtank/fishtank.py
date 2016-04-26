@@ -116,10 +116,10 @@ def make_screen(**kwargs):
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
     """
-    def __init__(self, oid=OID, **kwargs):
+    def __init__(self, **kwargs):
         """
         """
-        JNTBus.__init__(self, oid=oid, **kwargs)
+        JNTBus.__init__(self, **kwargs)
         self.buses = {}
         self.buses['owbus'] = OnewireBus(masters=[self], **kwargs)
         self.buses['gpiobus'] = GpioBus(masters=[self], **kwargs)
