@@ -203,9 +203,9 @@ class FishtankBus(JNTBus):
         """Stop the bus
         """
         self.stop_check()
+        JNTBus.stop(self)
         for bus in self.buses:
             self.buses[bus].stop()
-        JNTBus.stop(self)
 
     def check_heartbeat(self):
         """Check that the component is 'available'
