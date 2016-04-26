@@ -52,6 +52,8 @@ from janitoo_events.component import BiocycleComponent
 from janitoo_events.bus import EventsBus
 from janitoo_factory.threads.remote import RemoteNodeComponent as RCNodeComponent
 
+from janitoo_raspberry_fishtank.thread_fishtank import OID
+
 ##############################################################
 #Check that we are in sync with the official command classes
 #Must be implemented for non-regression
@@ -114,10 +116,10 @@ def make_screen(**kwargs):
 class FishtankBus(JNTBus):
     """A bus to manage Fishtank
     """
-    def __init__(self, **kwargs):
+    def __init__(self, oid=OID, **kwargs):
         """
         """
-        JNTBus.__init__(self, **kwargs)
+        JNTBus.__init__(self, oid=oid, **kwargs)
         self.buses = {}
         self.buses['owbus'] = OnewireBus(masters=[self], **kwargs)
         self.buses['gpiobus'] = GpioBus(masters=[self], **kwargs)

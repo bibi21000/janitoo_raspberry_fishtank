@@ -54,8 +54,10 @@ COMMAND_CONTROLLER = 0x1050
 assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 ##############################################################
 
+OID = 'fishtank'
+
 def make_thread(options):
-    if get_option_autostart(options, 'fishtank') == True:
+    if get_option_autostart(options, OID) == True:
         return FishtankThread(options)
     else:
         return None
@@ -68,6 +70,6 @@ class FishtankThread(JNTBusThread):
         """Build the bus
         """
         from janitoo_raspberry_fishtank.fishtank import FishtankBus
-        self.section = 'fishtank'
+        self.section = OID
         self.bus = FishtankBus(options=self.options, oid=self.section, product_name="Raspberry fishtank controller")
 
