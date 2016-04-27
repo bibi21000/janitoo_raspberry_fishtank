@@ -126,6 +126,7 @@ class FishtankBus(JNTBus):
         self.buses['spibus'] = SPIBus(masters=[self], **kwargs)
         self.buses['i2cbus'] = I2CBus(masters=[self], **kwargs)
         self.buses['thermal'] = ThermalBus(masters=[self], **kwargs)
+        self.buses['events'] = EventsBus(masters=[self], **kwargs)
         self._fishtank_lock =  threading.Lock()
         self.check_timer = None
         uuid="timer_delay"
