@@ -129,7 +129,7 @@ class FishtankBus(JNTBus):
         self.buses['events'] = EventsBus(masters=[self], **kwargs)
         self._fishtank_lock =  threading.Lock()
         self.check_timer = None
-        uuid="timer_delay"
+        uuid="%s_timer_delay"%OID
         self.values[uuid] = self.value_factory['config_integer'](options=self.options, uuid=uuid,
             node_uuid=self.uuid,
             help='The delay between 2 checks',
