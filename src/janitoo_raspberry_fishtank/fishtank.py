@@ -151,7 +151,7 @@ class FishtankBus(JNTBus):
         """
         self.stop_check()
         if self.check_timer is None and self.is_started:
-            self.check_timer = threading.Timer(self.values['timer_delay'].data, self.on_check)
+            self.check_timer = threading.Timer(self.values["%s_timer_delay"%OID].data, self.on_check)
             self.check_timer.start()
         state = True
         if self.nodeman.is_started:
