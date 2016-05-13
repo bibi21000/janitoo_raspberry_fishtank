@@ -16,6 +16,9 @@ Fishtank
 
 The first raspberry appliance server developped using Janitoo : a manager for your aquarium
 
+Documentation
+=============
+You can browse online documentation here : https://bibi21000.github.io/janitoo_raspberry_fishtank/.
 
 Needs
 =====
