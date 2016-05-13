@@ -1,0 +1,38 @@
+janitoo_raspberry_fishtank package
+==================================
+
+Submodules
+----------
+
+janitoo_raspberry_fishtank.fishtank module
+------------------------------------------
+
+.. automodule:: janitoo_raspberry_fishtank.fishtank
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+janitoo_raspberry_fishtank.server module
+----------------------------------------
+
+.. automodule:: janitoo_raspberry_fishtank.server
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+janitoo_raspberry_fishtank.thread_fishtank module
+-------------------------------------------------
+
+.. automodule:: janitoo_raspberry_fishtank.thread_fishtank
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: janitoo_raspberry_fishtank
+    :members:
+    :undoc-members:
+    :show-inheritance:

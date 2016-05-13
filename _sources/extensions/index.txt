@@ -1,0 +1,32 @@
+janitoo_raspberry_fishtank package
+==================================
+
+Show janitoo's extensions.
+
+Core extensions
+---------------
+
+Threads
+^^^^^^^
+
+ - fishtank (janitoo_raspberry_fishtank.thread_fishtank:make_thread)
+
+Components
+^^^^^^^^^^
+
+ - fishtank.pir (janitoo_raspberry_fishtank.fishtank:make_pir)
+ - fishtank.tide (janitoo_raspberry_fishtank.fishtank:make_tide)
+ - fishtank.sonic (janitoo_raspberry_fishtank.fishtank:make_sonic)
+ - fishtank.switch_fullsun (janitoo_raspberry_fishtank.fishtank:make_switch_fullsun)
+ - fishtank.dcmotor (janitoo_raspberry_fishtank.fishtank:make_dcmotor)
+ - fishtank.timelapse (janitoo_raspberry_fishtank.fishtank:make_timelapse)
+ - fishtank.thermostat (janitoo_raspberry_fishtank.fishtank:make_thermostat)
+ - fishtank.sun (janitoo_raspberry_fishtank.fishtank:make_sun)
+ - fishtank.remote_node (janitoo_raspberry_fishtank.fishtank:make_remote_node)
+ - fishtank.airflow (janitoo_raspberry_fishtank.fishtank:make_airflow)
+ - fishtank.ambiance (janitoo_raspberry_fishtank.fishtank:make_ambiance)
+ - fishtank.moon (janitoo_raspberry_fishtank.fishtank:make_moon)
+ - fishtank.screen (janitoo_raspberry_fishtank.fishtank:make_screen)
+ - fishtank.temperature (janitoo_raspberry_fishtank.fishtank:make_temperature)
+ - fishtank.led (janitoo_raspberry_fishtank.fishtank:make_led)
+
