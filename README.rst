@@ -10,6 +10,14 @@
     :target: https://coveralls.io/github/bibi21000/janitoo_raspberry_fishtank?branch=master
     :alt: Coveralls results
 
+.. image:: https://landscape.io/github/bibi21000/janitoo_raspberry_fishtank/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/bibi21000/janitoo_raspberry_fishtank/master
+   :alt: Code Health
+
+.. image:: https://img.shields.io/badge/Documenation-ok-brightgreen.svg?style=flat
+   :target: https://bibi21000.github.io/janitoo_raspberry_fishtank/index.html
+   :alt: Documentation
+
 ========
 Fishtank
 ========
