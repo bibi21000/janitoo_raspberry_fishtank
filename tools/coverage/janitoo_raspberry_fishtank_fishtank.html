@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for janitoo_raspberry_fishtank.fishtank: 90%</title>
+    <title>Coverage for janitoo_raspberry_fishtank.fishtank: 91%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     
     <script type='text/javascript' src='jquery.min.js'></script>
@@ -21,13 +21,13 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>janitoo_raspberry_fishtank.fishtank</b> :
-            <span class='pc_cov'>90%</span>
+            <span class='pc_cov'>91%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
             254 statements &nbsp;
-            <span class='run hide_run shortkey_r button_toggle_run'>229 run</span>
-            <span class='mis shortkey_m button_toggle_mis'>25 missing</span>
+            <span class='run hide_run shortkey_r button_toggle_run'>231 run</span>
+            <span class='mis shortkey_m button_toggle_mis'>23 missing</span>
             <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
             
         </h2>
@@ -275,10 +275,10 @@
 <p id='n212' class='pln'><a href='#n212'>212</a></p>
 <p id='n213' class='pln'><a href='#n213'>213</a></p>
 <p id='n214' class='pln'><a href='#n214'>214</a></p>
-<p id='n215' class='stm mis'><a href='#n215'>215</a></p>
+<p id='n215' class='stm run hide_run'><a href='#n215'>215</a></p>
 <p id='n216' class='pln'><a href='#n216'>216</a></p>
 <p id='n217' class='pln'><a href='#n217'>217</a></p>
-<p id='n218' class='stm mis'><a href='#n218'>218</a></p>
+<p id='n218' class='stm run hide_run'><a href='#n218'>218</a></p>
 <p id='n219' class='pln'><a href='#n219'>219</a></p>
 <p id='n220' class='stm run hide_run'><a href='#n220'>220</a></p>
 <p id='n221' class='pln'><a href='#n221'>221</a></p>
@@ -645,7 +645,7 @@
 <p id='t129' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>buses</span><span class='op'>[</span><span class='str'>&#39;events&#39;</span><span class='op'>]</span> <span class='op'>=</span> <span class='nam'>EventsBus</span><span class='op'>(</span><span class='nam'>masters</span><span class='op'>=</span><span class='op'>[</span><span class='nam'>self</span><span class='op'>]</span><span class='op'>,</span> <span class='op'>**</span><span class='nam'>kwargs</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t130' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>_fishtank_lock</span> <span class='op'>=</span>&nbsp; <span class='nam'>threading</span><span class='op'>.</span><span class='nam'>Lock</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t131' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>check_timer</span> <span class='op'>=</span> <span class='nam'>None</span><span class='strut'>&nbsp;</span></p>
-<p id='t132' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>uuid</span><span class='op'>=</span><span class='str'>&quot;timer_delay&quot;</span><span class='strut'>&nbsp;</span></p>
+<p id='t132' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>uuid</span><span class='op'>=</span><span class='str'>&quot;%s_timer_delay&quot;</span><span class='op'>%</span><span class='nam'>OID</span><span class='strut'>&nbsp;</span></p>
 <p id='t133' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>values</span><span class='op'>[</span><span class='nam'>uuid</span><span class='op'>]</span> <span class='op'>=</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>value_factory</span><span class='op'>[</span><span class='str'>&#39;config_integer&#39;</span><span class='op'>]</span><span class='op'>(</span><span class='nam'>options</span><span class='op'>=</span><span class='nam'>self</span><span class='op'>.</span><span class='nam'>options</span><span class='op'>,</span> <span class='nam'>uuid</span><span class='op'>=</span><span class='nam'>uuid</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
 <p id='t134' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>node_uuid</span><span class='op'>=</span><span class='nam'>self</span><span class='op'>.</span><span class='nam'>uuid</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
 <p id='t135' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>help</span><span class='op'>=</span><span class='str'>&#39;The delay between 2 checks&#39;</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
@@ -667,7 +667,7 @@
 <p id='t151' class='pln'><span class='str'>&nbsp; &nbsp; &nbsp; &nbsp; &quot;&quot;&quot;</span><span class='strut'>&nbsp;</span></p>
 <p id='t152' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>stop_check</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t153' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>check_timer</span> <span class='key'>is</span> <span class='nam'>None</span> <span class='key'>and</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>is_started</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t154' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>check_timer</span> <span class='op'>=</span> <span class='nam'>threading</span><span class='op'>.</span><span class='nam'>Timer</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>.</span><span class='nam'>values</span><span class='op'>[</span><span class='str'>&#39;timer_delay&#39;</span><span class='op'>]</span><span class='op'>.</span><span class='nam'>data</span><span class='op'>,</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>on_check</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t154' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>check_timer</span> <span class='op'>=</span> <span class='nam'>threading</span><span class='op'>.</span><span class='nam'>Timer</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>.</span><span class='nam'>values</span><span class='op'>[</span><span class='str'>&quot;%s_timer_delay&quot;</span><span class='op'>%</span><span class='nam'>OID</span><span class='op'>]</span><span class='op'>.</span><span class='nam'>data</span><span class='op'>,</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>on_check</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t155' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>check_timer</span><span class='op'>.</span><span class='nam'>start</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t156' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>state</span> <span class='op'>=</span> <span class='nam'>True</span><span class='strut'>&nbsp;</span></p>
 <p id='t157' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>nodeman</span><span class='op'>.</span><span class='nam'>is_started</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
@@ -728,10 +728,10 @@
 <p id='t212' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&quot;&quot;&quot;Check that the component is &#39;available&#39;</span><span class='strut'>&nbsp;</span></p>
 <p id='t213' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t214' class='pln'><span class='str'>&nbsp; &nbsp; &nbsp; &nbsp; &quot;&quot;&quot;</span><span class='strut'>&nbsp;</span></p>
-<p id='t215' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>res</span> <span class='op'>=</span> <span class='nam'>True</span><span class='strut'>&nbsp;</span></p>
+<p id='t215' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>res</span> <span class='op'>=</span> <span class='nam'>True</span><span class='strut'>&nbsp;</span></p>
 <p id='t216' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='com'>#~ for bus in self.buses:</span><span class='strut'>&nbsp;</span></p>
 <p id='t217' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='com'>#~ res = res and self.buses[bus].check_heartbeat()</span><span class='strut'>&nbsp;</span></p>
-<p id='t218' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>res</span><span class='strut'>&nbsp;</span></p>
+<p id='t218' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>res</span><span class='strut'>&nbsp;</span></p>
 <p id='t219' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t220' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>loop</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>,</span> <span class='nam'>stopevent</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t221' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&quot;&quot;&quot;Retrieve data</span><span class='strut'>&nbsp;</span></p>
