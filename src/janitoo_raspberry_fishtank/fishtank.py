@@ -52,7 +52,7 @@ from janitoo_events.component import BiocycleComponent
 from janitoo_events.bus import EventsBus
 from janitoo_factory.threads.remote import RemoteNodeComponent as RCNodeComponent
 
-from janitoo_raspberry_fishtank.thread_fishtank import OID
+from janitoo_raspberry_fishtank import OID
 
 ##############################################################
 #Check that we are in sync with the official command classes
@@ -231,7 +231,7 @@ class RemoteNodeComponent(RCNodeComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.remote_node')
+        oid = kwargs.pop('oid', '%s.remote_node'%OID)
         name = kwargs.pop('name', "Remote node")
         RCNodeComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -243,7 +243,7 @@ class AmbianceComponent(DHTComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.ambiance')
+        oid = kwargs.pop('oid', '%s.ambiance'%OID)
         name = kwargs.pop('name', "Ambiance sensor")
         DHTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -255,7 +255,7 @@ class DcMotorComponent(Pca9685DcMotorComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.dcmotor')
+        oid = kwargs.pop('oid', '%s.dcmotor'%OID)
         name = kwargs.pop('name', "DC Motor")
         Pca9685DcMotorComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -267,7 +267,7 @@ class LedComponent(Pca9685PwmComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.led')
+        oid = kwargs.pop('oid', '%s.led'%OID)
         name = kwargs.pop('name', "Led driver")
         Pca9685PwmComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -279,7 +279,7 @@ class PirComponent(PirGPIOComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.pir')
+        oid = kwargs.pop('oid', '%s.pir'%OID)
         name = kwargs.pop('name', "PIR sensor")
         PirGPIOComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -291,7 +291,7 @@ class SonicComponent(SonicGPIOComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.sonic')
+        oid = kwargs.pop('oid', '%s.sonic'%OID)
         name = kwargs.pop('name', "Sonic sensor")
         SonicGPIOComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -303,7 +303,7 @@ class TemperatureComponent(DS18B20):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.temperature')
+        oid = kwargs.pop('oid', '%s.temperature'%OID)
         name = kwargs.pop('name', "Temperature")
         DS18B20.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -315,7 +315,7 @@ class MoonComponent(BiocycleComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.moon')
+        oid = kwargs.pop('oid', '%s.moon'%OID)
         name = kwargs.pop('name', "Moon")
         BiocycleComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -327,7 +327,7 @@ class SunComponent(BiocycleComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.sun')
+        oid = kwargs.pop('oid', '%s.sun'%OID)
         name = kwargs.pop('name', "Sun")
         BiocycleComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -339,7 +339,7 @@ class TideComponent(BiocycleComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.tide')
+        oid = kwargs.pop('oid', '%s.tide'%OID)
         name = kwargs.pop('name', "Tide")
         BiocycleComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -351,7 +351,7 @@ class SwitchFullsunComponent(OutputComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.switch_fullsun')
+        oid = kwargs.pop('oid', '%s.switch_fullsun'%OID)
         name = kwargs.pop('name', "Fullsun")
         OutputComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -363,7 +363,7 @@ class AirflowComponent(OutputComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.airflow')
+        oid = kwargs.pop('oid', '%s.airflow'%OID)
         name = kwargs.pop('name', "Air flow")
         OutputComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -375,7 +375,7 @@ class TimelapseComponent(JNTComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.timelapse')
+        oid = kwargs.pop('oid', '%s.timelapse'%OID)
         name = kwargs.pop('name', "Timelapse")
         JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -392,7 +392,7 @@ class ScreenComponent(IliScreenComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.screen')
+        oid = kwargs.pop('oid', '%s.screen'%OID)
         name = kwargs.pop('name', "Screen")
         IliScreenComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
@@ -409,7 +409,7 @@ class ThermostatComponent(SimpleThermostatComponent):
     def __init__(self, bus=None, addr=None, **kwargs):
         """
         """
-        oid = kwargs.pop('oid', 'fishtank.thermostat')
+        oid = kwargs.pop('oid', '%s.thermostat'%OID)
         name = kwargs.pop('name', "Timelapse")
         JNTComponent.__init__(self, oid=oid, bus=bus, addr=addr, name=name,
                 **kwargs)
